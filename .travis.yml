@@ -1,0 +1,47 @@
+language: go
+sudo: required
+
+addons:
+  apt:
+    packages:
+      - build-essential
+      - pkg-config
+
+go:
+  - "1.x"
+  - "1.10"
+  - "1.11.x"
+  - master
+
+cache:
+  directories:
+    - "$HOME/opt"
+
+env:
+  global:
+    - IMAGEMAGICK_VERSION=7.0.8-40
+
+before_install:
+  - export PATH=$HOME/opt/bin:$PATH
+  - convert -version | grep $IMAGEMAGICK_VERSION || {
+    export CORES=$(nproc) && 
+    wget -q https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz && 
+    tar xf ${IMAGEMAGICK_VERSION}.tar.gz && 
+    cd ImageMagick-${IMAGEMAGICK_VERSION} && 
+    ./configure --prefix=$HOME/opt && make -j$CORES && sudo make install && 
+    sudo ldconfig /usr/local/lib && 
+    convert -version | grep $IMAGEMAGICK_VERSION && 
+    cd $TRAVIS_BUILD_DIR; }
+
+  - export LD_FLAGS=-L$HOME/opt/lib
+  - export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$HOME/opt/lib
+  - export CPATH=$CPATH:$HOME/opt/include
+  - export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$HOME/opt/lib
+  - export PKG_CONFIG_PATH=$HOME/opt/lib/pkgconfig
+
+install:
+  - go get
+
+script:
+  - go build
+ 
