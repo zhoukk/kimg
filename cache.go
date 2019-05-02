@@ -16,6 +16,9 @@ func NewKimgCache(config *KimgConfig) (KimgCache, error) {
 	case "none":
 		log.Println("[INFO] cache disabled")
 		return nil, nil
+	case "memory":
+		log.Println("[INFO] cache [memory] used")
+		return NewKimgMemoryCache(config)
 	case "memcache":
 		log.Println("[INFO] cache [memcache] used")
 		return NewKimgMemcacheCache(config)

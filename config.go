@@ -34,12 +34,13 @@ type KimgConfig struct {
 	}
 
 	Cache struct {
-		Mode         string
-		MaxSize      int
-		MemcacheHost string
-		MemcachePort int
-		RedisHost    string
-		RedisPort    int
+		Mode           string
+		MaxSize        int
+		MemcacheHost   string
+		MemcachePort   int
+		RedisHost      string
+		RedisPort      int
+		MemoryCapacity int64
 	}
 
 	Storage struct {
@@ -57,9 +58,9 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 	cfg.Httpd.Port = 80
 	cfg.Httpd.Headers = "Server:kimg"
 	cfg.Httpd.Etag = 1
-	cfg.Httpd.MaxAge = 7776000
+	cfg.Httpd.MaxAge = 90 * 24 * 3600
 	cfg.Httpd.FormName = "file"
-	cfg.Httpd.MaxSize = 104857600
+	cfg.Httpd.MaxSize = 100 * 1024 * 1024
 	cfg.Httpd.EnableWeb = 1
 
 	cfg.Image.Format = "jpeg"
@@ -70,12 +71,13 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 	cfg.Logger.Level = "debug"
 	cfg.Logger.File = "kimg.log"
 
-	cfg.Cache.Mode = "none"
-	cfg.Cache.MaxSize = 1048576
+	cfg.Cache.Mode = "memory"
+	cfg.Cache.MaxSize = 1 * 1024 * 1024
 	cfg.Cache.MemcacheHost = "127.0.0.1"
 	cfg.Cache.MemcachePort = 11211
 	cfg.Cache.RedisHost = "127.0.0.1"
 	cfg.Cache.RedisPort = 6379
+	cfg.Cache.MemoryCapacity = 100 * 1024 * 1024
 
 	cfg.Storage.Mode = "file"
 	cfg.Storage.SaveNew = 1
@@ -155,6 +157,9 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 	}
 	if env, ok := os.LookupEnv("KIMG_CACHE_REDIS_PORT"); ok {
 		cfg.Cache.RedisPort, _ = strconv.Atoi(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_CACHE_MEMORY_CAPACITY"); ok {
+		cfg.Cache.MemoryCapacity, _ = strconv.ParseInt(env, 0, 64)
 	}
 
 	// storage env
