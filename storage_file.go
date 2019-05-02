@@ -1,14 +1,16 @@
 package main
 
 import (
-	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
+	"sync"
 )
 
 type kimgFileStorage struct {
 	rootDir string
+	mtx     sync.RWMutex
 	*KimgBaseStorage
 }
 
@@ -27,68 +29,49 @@ func (storage *kimgFileStorage) Release() {}
 func (storage *kimgFileStorage) Set(req *KimgRequest, data []byte) error {
 	imageDir, imageFile := storage.imageDirAndFile(req)
 
+	storage.mtx.Lock()
+	defer storage.mtx.Unlock()
+
 	err := os.MkdirAll(imageDir, 0755)
 	if err != nil {
 		storage.Warn("MkdirAll %s, err: %s", imageDir, err)
 		return err
 	}
 
-	size := len(data)
-	f, err := os.OpenFile(imageFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0664)
+	err = ioutil.WriteFile(imageFile, data, 0644)
 	if err != nil {
-		storage.Warn("OpenFile %s, err: %s", imageFile, err)
+		storage.Warn("WriteFile %s, err: %s", imageFile, err)
 		return err
 	}
-	defer f.Close()
-	if n, err := f.Write(data); err != nil {
-		storage.Warn("Write %s, err: %s", imageFile, err)
-		return err
-	} else if n < size {
-		storage.Warn("Write %s, wrote: %d, need: %d", imageFile, n, size)
-		return io.ErrShortWrite
-	}
 
-	storage.Debug("kimgFileStorage Set dir:%s, file: %s, size: %d", imageDir, imageFile, size)
+	storage.Debug("kimgFileStorage Set dir:%s, file: %s, size: %d", imageDir, imageFile, len(data))
 
-	return err
+	return nil
 }
 
 func (storage *kimgFileStorage) Get(req *KimgRequest) ([]byte, error) {
 	_, imageFile := storage.imageDirAndFile(req)
 
-	f, err := os.OpenFile(imageFile, os.O_RDONLY, 0755)
-	defer f.Close()
+	storage.mtx.RLock()
+	defer storage.mtx.RUnlock()
+
+	data, err := ioutil.ReadFile(imageFile)
 	if err != nil {
-		storage.Debug("OpenFile %s, err: %s", imageFile, err)
+		storage.Warn("ReadFile %s, err: %s", imageFile, err)
 		return nil, err
-	}
-	fi, err := f.Stat()
-	if err != nil {
-		storage.Warn("Stat %s, err: %s", imageFile, err)
-		return nil, err
-	}
-	size := int(fi.Size())
-	if size <= 0 {
-		storage.Warn("Stat %s, size is 0", imageFile)
-		return nil, io.ErrShortBuffer
 	}
 
-	data := make([]byte, size)
-	if n, err := f.Read(data); err != nil {
-		storage.Warn("Read %s, err: %s", imageFile, err)
-		return nil, err
-	} else if n < size {
-		storage.Warn("Read %s, read: %d, need: %d", imageFile, n, size)
-		return nil, io.ErrShortBuffer
-	}
-
-	storage.Debug("kimgFileStorage Get file: %s, size: %d", imageFile, size)
+	storage.Debug("kimgFileStorage Get file: %s, size: %d", imageFile, len(data))
 
 	return data, nil
 }
 
 func (storage *kimgFileStorage) Del(req *KimgRequest) error {
 	imageDir, _ := storage.imageDirAndFile(req)
+
+	storage.mtx.Lock()
+	defer storage.mtx.Unlock()
+
 	err := os.RemoveAll(imageDir)
 	if err != nil {
 		storage.Warn("RemoveAll %s, err: %s", imageDir, err)
