@@ -45,3 +45,6 @@ install:
 script:
   - go build
  
+notifications:
+  email:
+    - izhoukk@gmail.com
