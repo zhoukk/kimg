@@ -1,50 +1,72 @@
 language: go
 sudo: required
-
+os:
+- linux
+- osx
 addons:
   apt:
     packages:
-      - build-essential
-      - pkg-config
-
+    - build-essential
+    - pkg-config
+    - libjpeg-dev
+    - libpng-dev
+    - libgif-dev
+    - libwebp-dev
+    - libfontconfig1-dev
+    - libfreetype6-dev
+    - libgomp1
+    - libexpat1-dev
 go:
-  - "1.x"
-  - "1.10"
-  - "1.11.x"
-  - master
-
+- master
 cache:
   directories:
-    - "$HOME/opt"
-
+  - "$HOME/opt"
 env:
   global:
-    - IMAGEMAGICK_VERSION=7.0.8-40
-
+  - IMAGEMAGICK_VERSION=7.0.8-40
 before_install:
-  - export PATH=$HOME/opt/bin:$PATH
-  - convert -version | grep $IMAGEMAGICK_VERSION || {
-    export CORES=$(nproc) && 
-    wget -q https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz && 
-    tar xf ${IMAGEMAGICK_VERSION}.tar.gz && 
-    cd ImageMagick-${IMAGEMAGICK_VERSION} && 
-    ./configure --prefix=$HOME/opt && make -j$CORES && sudo make install && 
-    sudo ldconfig /usr/local/lib && 
-    convert -version | grep $IMAGEMAGICK_VERSION && 
-    cd $TRAVIS_BUILD_DIR; }
-
-  - export LD_FLAGS=-L$HOME/opt/lib
-  - export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$HOME/opt/lib
-  - export CPATH=$CPATH:$HOME/opt/include
-  - export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$HOME/opt/lib
-  - export PKG_CONFIG_PATH=$HOME/opt/lib/pkgconfig
-
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update && brew install yarn libomp
+  libjpeg webp fontconfig freetype; fi
+- nvm install stable
+- nvm use stable
+- export PATH=$HOME/opt/bin:$PATH
+- convert -version | grep $IMAGEMAGICK_VERSION || { wget -q https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz
+  && tar xf ${IMAGEMAGICK_VERSION}.tar.gz && cd ImageMagick-${IMAGEMAGICK_VERSION}
+  && ./configure --prefix=$HOME/opt --with-bzlib=no --with-djvu=no --with-dps=no --with-fftw=no
+  --with-flif=no --with-gvc=no --with-jbig=no --with-jp2=no --with-fpx=no --with-heic=no
+  --with-ltdl=no --with-openjp2=no --with-pango=no --with-raqm=no --with-raw=no --with-zstd=no
+  --with-wmf=no --with-openexr=no --with-lcms=no --with-lqr=no --with-lzma=no --with-tiff=no
+  --with-x=no  --with-xml=no && make && sudo make install && convert -version | grep
+  $IMAGEMAGICK_VERSION && cd $TRAVIS_BUILD_DIR; }
+- export LD_FLAGS=-L$HOME/opt/lib
+- export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$HOME/opt/lib
+- export CPATH=$CPATH:$HOME/opt/include
+- export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$HOME/opt/lib
+- export PKG_CONFIG_PATH=$HOME/opt/lib/pkgconfig
 install:
-  - go get
-
+- export CGO_CFLAGS_ALLOW='-fopenmp'
+- export CGO_CFLAGS="`pkg-config --cflags MagickWand MagickCore`"
+- export CGO_LDFLAGS="`pkg-config --libs MagickWand MagickCore` -ljpeg -lpng -lwebpmux
+  -lwebp -lfontconfig -lfreetype -lgomp -lexpat -lz -lm -ldl"
+- go get -d && go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick
 script:
-  - go build
- 
+- export KIMG_VERSION="`git describe "--abbrev=0" "--tags"`"
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then go build -ldflags "-w -s -X 'main.KimgVersion=${KIMG_VERSION#*release-}'"
+  -o kimg; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go build -ldflags "-linkmode 'external'
+  -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_VERSION#*release-}'" -o
+  kimg; fi
+- cd web && yarn && yarn build && cd ..
+before_deploy:
+- tar cf kimg_${KIMG_VERSION#*release-}_${TRAVIS_OS_NAME}.tar.gz kimg kimg.ini www
+deploy:
+  provider: releases
+  api_key:
+    secure: bOXRTpSIx/z0k5cpN596WL0oo8ubu0vAKt+5ZjvGrBakgcBl6vAJiVpKHIk81pCRUJDk6Hbq0gR/R6JyS/TYp3WcQiKTfxneMPaZ4P+otA9iJsrFN0nsMjS29/ngL68UlyUz+Z48bCPfVAsuB0G2XYJ6HaiSg4QL8iDgqQD427GreNhd44jjOw3DhPR8gvpTxfEw5HFMJMenKqwJKEE0NFPF1o4EuFs6TbWGuaVWH6zKFJdg1jxD/zMH63WaglQx9Z6mWJK5ApMHN7MCtDFdSpbJRFaaRbXJdjOeMu4NNgzjCdzJRdp/Blh0PFpD26oh0uORx2vk5jWQQYb4+DAunage8/YTa0/0H4qxkPH5x2rpgX4EqlUNLT//x7g/7TEHMWy73Ho7bmlBagEq8aYafq0sKB8UykaISqxRcQ0l2foS+VmVmIWO9Qohq7cLmFX5LkKZGj/B1pkKegxAB16XFQ3vgwLcK0a23SWb713IDropgOfCQ8F9NS67jU7PJAlCNRgHzCDFhPc784UlG5jMP3aPWNki7BOw0kBhbXyQ6Ua3K8OVQ9QTFIJLc6WiRT7uAZyvE8ydPCK997HpoFcKUrUeIeISRD0/t/DF0jJAUxSFiay1f/YgtAW2acnu+yZEMHVK0gbD1ZWtZJ1m1pcu8GnM1fQlckGgzdc/CDm9C6w=
+  file: kimg_${KIMG_VERSION#*release-}_${TRAVIS_OS_NAME}.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true
 notifications:
   email:
-    - izhoukk@gmail.com
+  - izhoukk@gmail.com
