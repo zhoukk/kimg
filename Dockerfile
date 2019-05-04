@@ -23,8 +23,8 @@ RUN export CGO_CFLAGS_ALLOW='-fopenmp' && \
     export CGO_LDFLAGS="`pkg-config --libs MagickWand MagickCore` \
     -ljpeg -lpng -lwebpmux -lwebp -lfontconfig -lfreetype -lgomp -lexpat -lz -lm -ldl" && \
     go get -d && go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick && \
-    export KIMG_VERSION="`git describe "--abbrev=0" "--tags"`" && \
-    go build -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_VERSION#*release-}'" -o kimg
+    export KIMG_TAG="`git describe "--abbrev=0" "--tags"`" && \
+    go build -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG#*release-}'" -o kimg
 
 FROM node AS nodebuilder
 
