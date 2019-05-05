@@ -37,17 +37,20 @@ $ open http://localhost
 
 ## What's in docker image
 
-[![asciicast](https://asciinema.org/a/243736.svg)](https://asciinema.org/a/243736?autoplay=1)
+<a href="https://asciinema.org/a/243736?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243736.svg" width=480 /></a>
 
 ## Usage
 
 > Upload a image to kimg
 
 - Upload use raw-data
-[![asciicast](https://asciinema.org/a/243754.svg)](https://asciinema.org/a/243754?autoplay=1)
+
+<a href="https://asciinema.org/a/243754?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243754.svg" width=480 /></a>
+
 
 - Upload use multipart-form
-[![asciicast](https://asciinema.org/a/243841.svg)](https://asciinema.org/a/243841?autoplay=1)
+
+<a href="https://asciinema.org/a/243841?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243841.svg" width=480 /></a>
 
 > Fetch a image with style from kimg
 
@@ -57,7 +60,7 @@ $ open http://localhost/image/323551c4a7e2071a28a41331b98ca821?s=1&sm=fit&sw=300
 
 > Get a image information
 
-[![asciicast](https://asciinema.org/a/243758.svg)](https://asciinema.org/a/243758?autoplay=1)
+<a href="https://asciinema.org/a/243758?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243758.svg" width=480 /></a>
 
 
 ## License

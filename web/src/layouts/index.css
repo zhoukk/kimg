@@ -20,6 +20,10 @@
   color: white;
 }
 
+.version {
+  font-size: 1.2rem;
+}
+
 .footer {
   text-align: center;
 }

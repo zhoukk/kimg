@@ -37,17 +37,19 @@ $ open http://localhost
 
 ## docker镜像中包含的文件结构
 
-[![asciicast](https://asciinema.org/a/243736.svg)](https://asciinema.org/a/243736?autoplay=1)
+<a href="https://asciinema.org/a/243736?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243736.svg" width=480 /></a>
 
 ## 用法
 
 > 上传图片到kimg服务
 
 - 使用raw-data方式post上传
-[![asciicast](https://asciinema.org/a/243754.svg)](https://asciinema.org/a/243754?autoplay=1)
+
+<a href="https://asciinema.org/a/243754?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243754.svg" width=480 /></a>
 
 - 使用multipart-form方式post上传
-[![asciicast](https://asciinema.org/a/243841.svg)](https://asciinema.org/a/243841?autoplay=1)
+
+<a href="https://asciinema.org/a/243841?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243841.svg" width=480 /></a>
 
 > 获取一个指定样式的图片
 
@@ -57,7 +59,7 @@ $ open http://localhost/image/323551c4a7e2071a28a41331b98ca821?s=1&sm=fit&sw=300
 
 > 获取图片的信息
 
-[![asciicast](https://asciinema.org/a/243758.svg)](https://asciinema.org/a/243758?autoplay=1)
+<a href="https://asciinema.org/a/243758?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243758.svg" width=480 /></a>
 
 ## License
 

@@ -1,5 +1,6 @@
 {
-  "private": true,
+  "name": "kimg",
+  "version": "0.3.0",
   "scripts": {
     "start": "umi dev",
     "build": "umi build",
