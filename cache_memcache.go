@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/bradfitz/gomemcache/memcache"
 )
 
@@ -12,8 +10,7 @@ type kimgMemcacheCache struct {
 
 // NewKimgMemcacheCache create a memcache cache instance.
 func NewKimgMemcacheCache(config *KimgConfig) (KimgCache, error) {
-	addr := fmt.Sprintf("%s:%d", config.Cache.MemcacheHost, config.Cache.MemcachePort)
-	client := memcache.New(addr)
+	client := memcache.New(config.Cache.Memcache.URL)
 
 	return &kimgMemcacheCache{
 		client: client,

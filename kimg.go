@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 	"runtime"
@@ -16,7 +15,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&configFile, "c", "kimg.ini", "config file")
+	flag.StringVar(&configFile, "c", "kimg.yaml", "config file")
 	flag.Parse()
 }
 
@@ -31,7 +30,6 @@ func main() {
 	}
 	defer ctx.Release()
 
-	addr := fmt.Sprintf("%s:%d", ctx.Config.Httpd.Host, ctx.Config.Httpd.Port)
-	log.Printf("[INFO] kimg#%s start at %s\n", KimgVersion, addr)
-	log.Fatalln(http.ListenAndServe(addr, ctx))
+	log.Printf("[INFO] kimg#%s start at %s\n", KimgVersion, ctx.Config.Httpd.Bind)
+	log.Fatalln(http.ListenAndServe(ctx.Config.Httpd.Bind, ctx))
 }

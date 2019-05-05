@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
@@ -14,12 +13,11 @@ type kimgRedisCache struct {
 
 // NewKimgRedisCache create a redis cache instance.
 func NewKimgRedisCache(config *KimgConfig) (KimgCache, error) {
-	addr := fmt.Sprintf("%s:%d", config.Cache.RedisHost, config.Cache.RedisPort)
 	pool := &redis.Pool{
 		MaxIdle:     3,
 		IdleTimeout: 240 * time.Second,
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", addr)
+			c, err := redis.Dial("tcp", config.Cache.Redis.URL)
 			if err != nil {
 				return nil, err
 			}

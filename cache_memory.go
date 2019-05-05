@@ -25,7 +25,7 @@ func NewKimgMemoryCache(config *KimgConfig) (KimgCache, error) {
 	return &kimgMemoryCache{
 		list:     list.New(),
 		table:    make(map[string]*list.Element),
-		capacity: config.Cache.MemoryCapacity,
+		capacity: config.Cache.Memory.Capacity,
 	}, nil
 }
 

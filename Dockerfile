@@ -36,7 +36,7 @@ RUN cd web && yarn && yarn build
 
 FROM scratch
 COPY --from=gobuilder /go/src/qizhidata.com/zhoukk/kimg/kimg .
-COPY --from=gobuilder /go/src/qizhidata.com/zhoukk/kimg/kimg.ini .
+COPY --from=gobuilder /go/src/qizhidata.com/zhoukk/kimg/kimg.yaml .
 COPY --from=nodebuilder /app/www www
 EXPOSE 80
 ENTRYPOINT ["/kimg"]

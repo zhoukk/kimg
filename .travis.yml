@@ -58,7 +58,7 @@ script:
   kimg; fi
 - cd web && yarn && yarn build && cd ..
 before_deploy:
-- tar cf kimg_${KIMG_TAG#*release-}_${TRAVIS_OS_NAME}.tar.gz kimg kimg.ini www
+- tar cf kimg_${KIMG_TAG#*release-}_${TRAVIS_OS_NAME}.tar.gz kimg kimg.yaml www
 deploy:
   provider: releases
   api_key:

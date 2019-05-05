@@ -68,7 +68,7 @@ func (ctx *KimgContext) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}))
 
-	if ctx.Config.Httpd.EnableWeb == 1 {
+	if ctx.Config.Httpd.EnableWeb {
 		mux.HandleFunc("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "GET":
@@ -177,18 +177,13 @@ func (ctx *KimgContext) get(w http.ResponseWriter, r *http.Request, md5Sum strin
 	}
 
 	headers := ctx.Config.Httpd.Headers
-	if len(headers) > 0 {
-		arr := strings.Split(headers, ",")
-		for i := 0; i < len(arr); i++ {
-			header := arr[i]
-			kvs := strings.Split(header, ":")
-			w.Header().Set(kvs[0], kvs[1])
-		}
+	for k, v := range headers {
+		w.Header().Set(k, v)
 	}
 
 	w.Header().Set("X-Kimg-Style", req.Key())
 
-	if ctx.Config.Httpd.Etag == 1 {
+	if ctx.Config.Httpd.Etag {
 		m := md5.New()
 		m.Write(data)
 		newMd5 := hex.EncodeToString(m.Sum(nil))
@@ -220,7 +215,7 @@ func (ctx *KimgContext) delete(w http.ResponseWriter, r *http.Request, md5Sum st
 }
 
 func (ctx *KimgContext) isAllowedType(fileType string) bool {
-	types := strings.Split(ctx.Config.Image.AllowedTypes, ",")
+	types := ctx.Config.Image.AllowedTypes
 	for _, t := range types {
 		if strings.Contains(fileType, t) {
 			return true
@@ -251,7 +246,7 @@ func (ctx *KimgContext) genRequest(r *http.Request, md5Sum string) *KimgRequest 
 	if v, ok := r.Form["save"]; ok {
 		req.Save = v[0] != "0"
 	} else {
-		req.Save = ctx.Config.Storage.SaveNew == 1
+		req.Save = ctx.Config.Storage.SaveNew
 	}
 
 	if v, ok := r.Form["s"]; ok {
