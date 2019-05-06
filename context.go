@@ -57,6 +57,7 @@ type KimgRequest struct {
 // KimgResponse define a image response.
 type KimgResponse struct {
 	Md5         string            `json:"md5"`
+	URL         string            `json:"url"`
 	Style       string            `json:"style,omitempty"`
 	Size        int               `json:"size"`
 	Width       int               `json:"width"`

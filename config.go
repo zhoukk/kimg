@@ -14,6 +14,7 @@ import (
 type KimgConfig struct {
 	Httpd struct {
 		Bind      string            `yaml:"bind,omitempty"`
+		Host      string            `yaml:"host,omitempty"`
 		Headers   map[string]string `yaml:"headers,omitempty"`
 		Etag      bool              `yaml:"etag,omitempty"`
 		MaxAge    int               `yaml:"maxAge,omitempty"`
@@ -60,6 +61,7 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 	var cfg KimgConfig
 
 	cfg.Httpd.Bind = "0.0.0.0:80"
+	cfg.Httpd.Host = "/"
 	cfg.Httpd.Headers = map[string]string{"Server": "kimg"}
 	cfg.Httpd.Etag = true
 	cfg.Httpd.MaxAge = 90 * 24 * 3600
@@ -100,6 +102,9 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 	// httpd env
 	if env, ok := os.LookupEnv("KIMG_HTTPD_BIND"); ok {
 		cfg.Httpd.Bind = env
+	}
+	if env, ok := os.LookupEnv("KIMG_HTTPD_HOST"); ok {
+		cfg.Httpd.Host = env
 	}
 	if env, ok := os.LookupEnv("KIMG_HTTPD_HEADERS"); ok {
 		arr := strings.Split(env, ",")

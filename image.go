@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"math"
+	"path/filepath"
 
 	"gopkg.in/gographics/imagick.v3/imagick"
 )
@@ -74,6 +75,7 @@ func (image *KimgImagick) Info(req *KimgRequest, data []byte) (*KimgResponse, er
 
 	return &KimgResponse{
 		Md5:         req.Md5,
+		URL:         filepath.Join(image.ctx.Config.Httpd.Host, "image", req.Md5),
 		Style:       req.Key(),
 		Size:        int(size),
 		Width:       int(width),

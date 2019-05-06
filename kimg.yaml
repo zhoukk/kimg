@@ -13,6 +13,11 @@ httpd:
   # ENV KIMG_HTTPD_BIND
   bind: 0.0.0.0:80
 
+  # Kimg web server hostname to serve.
+  # 
+  # ENV KIMG_HTTPD_HOST
+  host: 
+
   # Http headers set on image fetch response.
   # 
   # ENV KIMG_HTTPD_HEADERS
