@@ -454,7 +454,6 @@ export default class extends PureComponent {
 
   state = {
     md5sum: '',
-    host: '',
     query: '',
     moduleQuery: {},
     imageUrl: '',
@@ -464,13 +463,12 @@ export default class extends PureComponent {
   }
 
   onChange = info => {
-    const { host } = this.state
     const status = info.file.status;
     if (status === 'done') {
       message.success(`${info.file.name} uploaded successfully.`);
       this.setState({
         md5sum: info.file.response.md5,
-        originUrl: `${host}/image/${info.file.response.md5}?origin=1`,
+        originUrl: `/image/${info.file.response.md5}?origin=1`,
         originInfo: info.file.response
       })
     } else if (status === 'error') {
@@ -479,7 +477,7 @@ export default class extends PureComponent {
   }
 
   onImageQueryChange = (module, values) => {
-    const { host, md5sum, moduleQuery } = this.state
+    const { md5sum, moduleQuery } = this.state
 
     const q = {}
     moduleQuery[module] = values
@@ -495,9 +493,9 @@ export default class extends PureComponent {
     let imageUrl = ''
     const query = qs.stringify(q)
     if (query === '') {
-      imageUrl = `${host}/image/${md5sum}`
+      imageUrl = `/image/${md5sum}`
     } else {
-      imageUrl = `${host}/image/${md5sum}?${query}`
+      imageUrl = `/image/${md5sum}?${query}`
     }
     this.setState({ imageUrl, query })
   }
@@ -640,14 +638,13 @@ export default class extends PureComponent {
               <Panel header="Admin Panel" key="admin" style={{ border: 0 }}>
                 <Card size='small' title='Load Image From Kimg By Md5sum'>
                   <Search defaultValue={md5sum} placeholder='md5sum' size="large" onSearch={md5sum => {
-                    const { host } = this.state
                     if (md5sum.length !== 32) {
                       message.error(`invalid image md5sum: ${md5sum}.`);
                       return
                     }
                     this.setState({
                       md5sum,
-                      originUrl: `${host}/image/${md5sum}?origin=1`,
+                      originUrl: `/image/${md5sum}?origin=1`,
                     })
                   }} />
                   <Divider>
