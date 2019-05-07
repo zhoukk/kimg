@@ -13,7 +13,7 @@
 - 从linux二进制运行文件启动
 ```console
 $ wget -O- https://github.com/zhoukk/kimg/releases/download/release-v0.3.1/kimg_v0.3.1_linux.tar.gz | tar xf -
-$ cd kimg
+$ cd kimg_v0.3.1_linux
 $ ./kimg
 ```
 

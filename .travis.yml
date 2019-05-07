@@ -46,12 +46,15 @@ script:
 - go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG#*release-}'" -o kimg
 - cd web && yarn && yarn build && cd ..
 before_deploy:
-- tar cf kimg_${KIMG_TAG#*release-}_${TRAVIS_OS_NAME}.tar.gz kimg kimg.yaml www
+- export DIST_DIR=kimg_${KIMG_TAG#*release-}_${TRAVIS_OS_NAME}
+- mkdir -p ${DIST_DIR}
+- cp -rp kimg kimg.yaml www ${DIST_DIR}
+- tar cf ${DIST_DIR}.tar.gz ${DIST_DIR}
 deploy:
   provider: releases
   api_key:
     secure: qWK7pDHlwF1P/sr2fXKoNjov0q4IaKuAShbJLGPSQ7JR7Pv8peeyeHCPo7PYPh8nqftIpI/rq6bt/j5/0N5SHDNLJe1PEgy6Jcp+LiDDEE3BwwyMBt9ra6Lxuvn6i3778+xkNvPvSZJ5CUCptu58WZ+6mvdUYPJGSfMT11fS0UylL9c5tgh1wfZTseh6VIZ3SZWk9tHhAGORmSX1iMhFLScCcxgrpRhcHGuzGYjUPx3/vu91Xky9oUW+bdgnyM4MSO6v9S/RmlvIUeu9BktQd+Im4UuQYip4OxgB3GMWLDs1rOrdMeYPyxDIE4eLlniI/CNMDt8HMHhZeYziiUyuvi6DzKF2V9fiXyEIBQbSHP7hVT3Yu9gxbSsgtlTrm8XJYorCyP1xcbLG+33RMvD1SEuNL8ud+bATKo9+4J7SQZ9dQEfeeXXl4+e3c1TC3zcQ3Qd/6CGwJGmKQZ7HhpalwXbCaE3NfEvZfNJY/WtCX/2MaAxbxdPv/J/iHaLgBQoL+sE+0jagdvbXlUXNbAnLWqdDgNdIwl61/Kov+csNDmoIPPO6XfMW8IwJk9IW8yI4HPK9xEo+/GOnxuqU7kv0INjcfNOA/u+ZFjjL/pAYdiNG0IYme3jtZnAIf8zgO20QLErjdO0nJA6NN+SFIWM7g8/R7bYECk7CpyicimodIHg=
-  file: kimg_${KIMG_TAG#*release-}_${TRAVIS_OS_NAME}.tar.gz
+  file: ${DIST_DIR}.tar.gz
   skip_cleanup: true
   draft: true
   on:

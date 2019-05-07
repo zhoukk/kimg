@@ -13,7 +13,7 @@ English | [简体中文](./README.zh-CN.md)
 - run with linux binary
 ```console
 $ wget -O- https://github.com/zhoukk/kimg/releases/download/release-v0.3.1/kimg_v0.3.1_linux.tar.gz | tar xf -
-$ cd kimg
+$ cd kimg_v0.3.1_linux
 $ ./kimg
 ```
 
