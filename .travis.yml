@@ -2,7 +2,6 @@ language: go
 sudo: required
 os:
 - linux
-- osx
 addons:
   apt:
     packages:
@@ -25,18 +24,12 @@ env:
   global:
   - IMAGEMAGICK_VERSION=7.0.8-40
 before_install:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update && brew install yarn libomp
-  libjpeg webp fontconfig freetype; fi
 - nvm install stable
 - nvm use stable
 - export PATH=$HOME/opt/bin:$PATH
 - convert -version | grep $IMAGEMAGICK_VERSION || { wget -q https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz
   && tar xf ${IMAGEMAGICK_VERSION}.tar.gz && cd ImageMagick-${IMAGEMAGICK_VERSION}
-  && ./configure --prefix=$HOME/opt --with-bzlib=no --with-djvu=no --with-dps=no --with-fftw=no
-  --with-flif=no --with-gvc=no --with-jbig=no --with-jp2=no --with-fpx=no --with-heic=no
-  --with-ltdl=no --with-openjp2=no --with-pango=no --with-raqm=no --with-raw=no --with-zstd=no
-  --with-wmf=no --with-openexr=no --with-lcms=no --with-lqr=no --with-lzma=no --with-tiff=no
-  --with-x=no  --with-xml=no && make && sudo make install && convert -version | grep
+  && ./configure --prefix=$HOME/opt && make && sudo make install && convert -version | grep
   $IMAGEMAGICK_VERSION && cd $TRAVIS_BUILD_DIR; }
 - export LD_FLAGS=-L$HOME/opt/lib
 - export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$HOME/opt/lib
@@ -44,18 +37,13 @@ before_install:
 - export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$HOME/opt/lib
 - export PKG_CONFIG_PATH=$HOME/opt/lib/pkgconfig
 install:
-- export CGO_CFLAGS_ALLOW='-fopenmp'
+- export CGO_CFLAGS_ALLOW="-fopenmp"
 - export CGO_CFLAGS="`pkg-config --cflags MagickWand MagickCore`"
-- export CGO_LDFLAGS="`pkg-config --libs MagickWand MagickCore` -ljpeg -lpng -lwebpmux
-  -lwebp -lfontconfig -lfreetype -lgomp -lexpat -lz -lm -ldl"
+- export CGO_LDFLAGS="`pkg-config --libs MagickWand MagickCore` -ljpeg -lpng -lwebpmux -lwebp -lfontconfig -lfreetype -lgomp -lexpat -lz -lm -ldl"
 - go get -d && go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick
 script:
 - export KIMG_TAG="`git describe "--abbrev=0" "--tags"`"
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then go build -ldflags "-w -s -X 'main.KimgVersion=${KIMG_TAG#*release-}'"
-  -o kimg; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go build -ldflags "-linkmode 'external'
-  -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG#*release-}'" -o
-  kimg; fi
+- go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG#*release-}'" -o kimg
 - cd web && yarn && yarn build && cd ..
 before_deploy:
 - tar cf kimg_${KIMG_TAG#*release-}_${TRAVIS_OS_NAME}.tar.gz kimg kimg.yaml www
