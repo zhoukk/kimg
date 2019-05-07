@@ -20,7 +20,7 @@ $ ./kimg
 - 从docker镜像启动
 ```console
 $ docker pull zhoukk/kimg:v0.3.1
-$ docker run --rm -p 80:80 zhoukk/kimg
+$ docker run --rm -p 80:80 zhoukk/kimg:v0.3.1
 ```
 
 > 打开浏览器体验

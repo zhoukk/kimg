@@ -20,7 +20,7 @@ $ ./kimg
 - run with docker
 ```console
 $ docker pull zhoukk/kimg:v0.3.1
-$ docker run --rm -p 80:80 zhoukk/kimg
+$ docker run --rm -p 80:80 zhoukk/kimg:v0.3.1
 ```
 
 > open a browser and have fun
