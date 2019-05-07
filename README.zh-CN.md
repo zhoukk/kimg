@@ -12,21 +12,14 @@
 
 - 从linux二进制运行文件启动
 ```console
-$ wget -O- https://github.com/zhoukk/kimg/releases/download/release-v0.3.0/kimg_v0.3.0_linux.tar.gz | tar xf -
-$ cd kimg
-$ ./kimg
-```
-
-- 从macos二进制运行文件启动
-```console
-$ wget -O- https://github.com/zhoukk/kimg/releases/download/release-v0.3.0/kimg_v0.3.0_osx.tar.gz | tar xf -
+$ wget -O- https://github.com/zhoukk/kimg/releases/download/release-v0.3.1/kimg_v0.3.1_linux.tar.gz | tar xf -
 $ cd kimg
 $ ./kimg
 ```
 
 - 从docker镜像启动
 ```console
-$ docker pull zhoukk/kimg:v0.3.0
+$ docker pull zhoukk/kimg:v0.3.1
 $ docker run --rm -p 80:80 zhoukk/kimg
 ```
 
@@ -45,11 +38,11 @@ $ open http://localhost
 
 - 使用raw-data方式post上传
 
-<a href="https://asciinema.org/a/243754?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243754.svg" width=480 /></a>
+<a href="https://asciinema.org/a/243841?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243841.svg" width=480 /></a>
 
 - 使用multipart-form方式post上传
 
-<a href="https://asciinema.org/a/243841?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243841.svg" width=480 /></a>
+<a href="https://asciinema.org/a/243754?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243754.svg" width=480 /></a>
 
 > 获取一个指定样式的图片
 

@@ -12,21 +12,14 @@ English | [简体中文](./README.zh-CN.md)
 
 - run with linux binary
 ```console
-$ wget -O- https://github.com/zhoukk/kimg/releases/download/release-v0.3.0/kimg_v0.3.0_linux.tar.gz | tar xf -
-$ cd kimg
-$ ./kimg
-```
-
-- run with macos binary
-```console
-$ wget -O- https://github.com/zhoukk/kimg/releases/download/release-v0.3.0/kimg_v0.3.0_osx.tar.gz | tar xf -
+$ wget -O- https://github.com/zhoukk/kimg/releases/download/release-v0.3.1/kimg_v0.3.1_linux.tar.gz | tar xf -
 $ cd kimg
 $ ./kimg
 ```
 
 - run with docker
 ```console
-$ docker pull zhoukk/kimg:v0.3.0
+$ docker pull zhoukk/kimg:v0.3.1
 $ docker run --rm -p 80:80 zhoukk/kimg
 ```
 
@@ -45,12 +38,11 @@ $ open http://localhost
 
 - Upload use raw-data
 
-<a href="https://asciinema.org/a/243754?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243754.svg" width=480 /></a>
-
+<a href="https://asciinema.org/a/243841?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243841.svg" width=480 /></a>
 
 - Upload use multipart-form
 
-<a href="https://asciinema.org/a/243841?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243841.svg" width=480 /></a>
+<a href="https://asciinema.org/a/243754?autoplay=1" target="_blank"><img src="https://asciinema.org/a/243754.svg" width=480 /></a>
 
 > Fetch a image with style from kimg
 
