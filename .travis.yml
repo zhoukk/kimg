@@ -48,7 +48,7 @@ script:
 before_deploy:
 - export DIST_DIR=kimg_${KIMG_TAG#*release-}_${TRAVIS_OS_NAME}
 - mkdir -p ${DIST_DIR}
-- cp -rp kimg kimg.yaml www ${DIST_DIR}
+- cp -rp kimg kimg.yaml LICENSE www ${DIST_DIR}
 - tar cf ${DIST_DIR}.tar.gz ${DIST_DIR}
 deploy:
   provider: releases
