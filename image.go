@@ -165,12 +165,14 @@ func (image *KimgImagick) Convert(data []byte, req KimgRequest) ([]byte, error) 
 	}
 	image.ctx.Logger.Debug("SetImageCompressionQuality %d", req.Quality)
 
-	err = mw.SetImageFormat(req.Format)
-	if err != nil {
-		image.ctx.Logger.Warn("SetImageFormat %s, err: %s", req.Format, err)
-		return nil, err
+	if "none" != req.Format {
+		err = mw.SetImageFormat(req.Format)
+		if err != nil {
+			image.ctx.Logger.Warn("SetImageFormat %s, err: %s", req.Format, err)
+			return nil, err
+		}
+		image.ctx.Logger.Debug("SetImageFormat %s", req.Format)
 	}
-	image.ctx.Logger.Debug("SetImageFormat %s", req.Format)
 
 	newData := mw.GetImageBlob()
 	if newData == nil || len(newData) == 0 {
