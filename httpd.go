@@ -221,6 +221,9 @@ func (ctx *KimgContext) isAllowedType(fileType string) bool {
 			return true
 		}
 	}
+	if "none" == fileType {
+		return true
+	}
 	return false
 }
 
@@ -347,11 +350,13 @@ func (ctx *KimgContext) genRequest(r *http.Request, md5Sum string) *KimgRequest 
 
 	if v, ok := r.Form["q"]; ok {
 		req.Quality, _ = strconv.Atoi(v[0])
-	}
-	if req.Quality <= 0 {
+		if req.Quality < 0 {
+			req.Quality = ctx.Config.Image.Quality
+		} else if req.Quality > 100 {
+			req.Quality = 100
+		}
+	} else {
 		req.Quality = ctx.Config.Image.Quality
-	} else if req.Quality > 100 {
-		req.Quality = 100
 	}
 
 	if v, ok := r.Form["r"]; ok {

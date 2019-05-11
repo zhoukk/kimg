@@ -167,7 +167,7 @@ func (ctx *KimgContext) SaveImage(data []byte) (*KimgResponse, error) {
 // GetImage get a image data from kimg according to a image request.
 func (ctx *KimgContext) GetImage(req *KimgRequest) ([]byte, error) {
 
-	ctx.Logger.Debug("GetImage md5Sum: %s", req.Md5)
+	ctx.Logger.Debug("GetImage md5Sum: %s, req: %#v", req.Md5, req)
 
 	cacheKey := ctx.cacheKey(req)
 

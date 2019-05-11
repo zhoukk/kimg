@@ -46,7 +46,7 @@ class IntegerStep extends React.Component {
         </Col>
         <Col span={4}>
           <InputNumber
-            min={1}
+            min={0}
             max={100}
             formatter={value => `${value}%`}
             parser={value => value.replace('%', '')}
@@ -129,6 +129,7 @@ const ImageBasicQueryForm = Form.create({
       <FormItem label="Format">
         {getFieldDecorator('f', { initialValue: defaultQuery.f })(
           <RadioGroup buttonStyle="solid">
+            <RadioButton value='none'>NONE</RadioButton>
             <RadioButton value='jpg'>JPG</RadioButton>
             <RadioButton value='png'>PNG</RadioButton>
             <RadioButton value='webp'>WEBP</RadioButton>

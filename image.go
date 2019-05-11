@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"net/url"
+	"strings"
 
 	"gopkg.in/gographics/imagick.v3/imagick"
 )
@@ -62,11 +63,30 @@ func (image *KimgImagick) Info(req *KimgRequest, data []byte) (*KimgResponse, er
 		return nil, err
 	}
 
-	size, _ := mw.GetImageLength()
-	width := mw.GetImageWidth()
-	height := mw.GetImageHeight()
+	width := uint(0)
+	height := uint(0)
 	format := mw.GetImageFormat()
+	size, _ := mw.GetImageLength()
 	orientationType := mw.GetImageOrientation()
+
+	if "GIF" == format {
+		aw := mw.CoalesceImages()
+		defer aw.Destroy()
+		for i := 0; i < int(aw.GetNumberImages()); i++ {
+			aw.SetIteratorIndex(i)
+			w := aw.GetImageWidth()
+			h := aw.GetImageHeight()
+			if w > width {
+				width = w
+			}
+			if h > height {
+				height = h
+			}
+		}
+	} else {
+		width = mw.GetImageWidth()
+		height = mw.GetImageHeight()
+	}
 
 	exif := make(map[string]string)
 	names := mw.GetImageProperties("*")
@@ -99,6 +119,16 @@ func (image *KimgImagick) Convert(data []byte, req KimgRequest) ([]byte, error) 
 		image.ctx.Logger.Warn("ReadImageBlob err: %s", err)
 		return nil, err
 	}
+	mw.ResetIterator()
+
+	if "none" != req.Format {
+		err = mw.SetImageFormat(strings.ToUpper(req.Format))
+		if err != nil {
+			image.ctx.Logger.Warn("SetImageFormat %s, err: %s", req.Format, err)
+			return nil, err
+		}
+		image.ctx.Logger.Debug("SetImageFormat %s", req.Format)
+	}
 
 	if req.AutoOrient {
 		if err := mw.AutoOrientImage(); err != nil {
@@ -116,65 +146,34 @@ func (image *KimgImagick) Convert(data []byte, req KimgRequest) ([]byte, error) 
 		image.ctx.Logger.Debug("StripImage")
 	}
 
-	if req.Scale {
-		if err = image.scale(mw, &req); err != nil {
+	var newData []byte
+	format := mw.GetImageFormat()
+	if "GIF" == format {
+		delay := mw.GetImageDelay()
+		aw := mw.CoalesceImages()
+		mw.Destroy()
+		defer aw.Destroy()
+
+		mw = imagick.NewMagickWand()
+		mw.SetImageDelay(delay)
+		for i := 0; i < int(aw.GetNumberImages()); i++ {
+			aw.SetIteratorIndex(i)
+			img := aw.GetImage()
+			defer img.Destroy()
+			if err = image.convertImage(img, &req); err == nil {
+				mw.AddImage(img)
+			}
+		}
+		mw.OptimizeImageLayers()
+		mw.ResetIterator()
+		newData = mw.GetImagesBlob()
+	} else {
+		if err = image.convertImage(mw, &req); err != nil {
 			return nil, err
 		}
+		newData = mw.GetImageBlob()
 	}
 
-	if req.Crop {
-		if err = image.crop(mw, &req); err != nil {
-			return nil, err
-		}
-	}
-
-	if req.Rotate != 0 {
-		background := imagick.NewPixelWand()
-		defer background.Destroy()
-		if len(req.BGColor) > 0 && !background.SetColor(req.BGColor) {
-			image.ctx.Logger.Warn("background.SetColor %s failed", req.BGColor)
-			return nil, errors.New("background.SetColor failed")
-		}
-		err = mw.RotateImage(background, float64(req.Rotate))
-		if err != nil {
-			image.ctx.Logger.Warn("RotateImage %f, err: %s", req.Rotate, err)
-			return nil, err
-		}
-		image.ctx.Logger.Debug("RotateImage %d #%s", req.Rotate, req.BGColor)
-	}
-
-	if len(req.Text) > 0 {
-		if err = image.waterMark(mw, &req); err != nil {
-			return nil, err
-		}
-	}
-
-	if req.Gray {
-		err = mw.SetImageType(imagick.IMAGE_TYPE_GRAYSCALE)
-		if err != nil {
-			image.ctx.Logger.Warn("SetImageType gray, err: %s", err)
-			return nil, err
-		}
-		image.ctx.Logger.Debug("SetImageType gray")
-	}
-
-	err = mw.SetImageCompressionQuality(uint(req.Quality))
-	if err != nil {
-		image.ctx.Logger.Warn("SetImageCompressionQuality %d, err: %s", req.Quality, err)
-		return nil, err
-	}
-	image.ctx.Logger.Debug("SetImageCompressionQuality %d", req.Quality)
-
-	if "none" != req.Format {
-		err = mw.SetImageFormat(req.Format)
-		if err != nil {
-			image.ctx.Logger.Warn("SetImageFormat %s, err: %s", req.Format, err)
-			return nil, err
-		}
-		image.ctx.Logger.Debug("SetImageFormat %s", req.Format)
-	}
-
-	newData := mw.GetImageBlob()
 	if newData == nil || len(newData) == 0 {
 		image.ctx.Logger.Warn("GetImageBlob failed")
 		return nil, errors.New("GetImageBlob failed")
@@ -183,11 +182,60 @@ func (image *KimgImagick) Convert(data []byte, req KimgRequest) ([]byte, error) 
 	return newData, nil
 }
 
-func (image *KimgImagick) scale(mw *imagick.MagickWand, req *KimgRequest) error {
-	var w, h uint
+func (image *KimgImagick) convertImage(mw *imagick.MagickWand, req *KimgRequest) error {
+	if req.Scale {
+		if err := image.scale(mw, req); err != nil {
+			return err
+		}
+	}
 
-	w = mw.GetImageWidth()
-	h = mw.GetImageHeight()
+	if req.Crop {
+		if err := image.crop(mw, req); err != nil {
+			return err
+		}
+	}
+
+	if req.Rotate != 0 {
+		background := imagick.NewPixelWand()
+		defer background.Destroy()
+		if len(req.BGColor) > 0 && !background.SetColor(req.BGColor) {
+			image.ctx.Logger.Warn("background.SetColor %s failed", req.BGColor)
+			return errors.New("background.SetColor failed")
+		}
+		if err := mw.RotateImage(background, float64(req.Rotate)); err != nil {
+			image.ctx.Logger.Warn("RotateImage %f, err: %s", req.Rotate, err)
+			return err
+		}
+		image.ctx.Logger.Debug("RotateImage %d #%s", req.Rotate, req.BGColor)
+	}
+
+	if len(req.Text) > 0 {
+		if err := image.waterMark(mw, req); err != nil {
+			return err
+		}
+	}
+
+	if req.Gray {
+		if err := mw.SetImageType(imagick.IMAGE_TYPE_GRAYSCALE); err != nil {
+			image.ctx.Logger.Warn("SetImageType gray, err: %s", err)
+			return err
+		}
+		image.ctx.Logger.Debug("SetImageType gray")
+	}
+
+	if req.Quality > 0 {
+		if err := mw.SetImageCompressionQuality(uint(req.Quality)); err != nil {
+			image.ctx.Logger.Warn("SetImageCompressionQuality %d, err: %s", req.Quality, err)
+			return err
+		}
+		image.ctx.Logger.Debug("SetImageCompressionQuality %d", req.Quality)
+	}
+	return nil
+}
+
+func (image *KimgImagick) scale(mw *imagick.MagickWand, req *KimgRequest) error {
+	w := mw.GetImageWidth()
+	h := mw.GetImageHeight()
 
 	if req.ScaleP > 0 {
 		req.ScaleW = round(float64(w) * float64(req.ScaleP) / 100.0)
@@ -231,6 +279,7 @@ func (image *KimgImagick) scale(mw *imagick.MagickWand, req *KimgRequest) error 
 	if req.ScaleH <= 0 {
 		req.ScaleH = 1
 	}
+
 	if err := mw.ResizeImage(uint(req.ScaleW), uint(req.ScaleH), imagick.FILTER_LANCZOS); err != nil {
 		image.ctx.Logger.Warn("ResizeImage %d %d, err: %s", req.ScaleW, req.ScaleH, err)
 		return err
