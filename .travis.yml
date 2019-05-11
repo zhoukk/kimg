@@ -43,10 +43,10 @@ install:
 - go get -d && go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick
 script:
 - export KIMG_TAG="`git describe "--abbrev=0" "--tags"`"
-- go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG#*release-}'" -o kimg
+- go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG}'" -o kimg
 - cd web && yarn && yarn build && cd ..
 before_deploy:
-- export DIST_DIR=kimg_${KIMG_TAG#*release-}_${TRAVIS_OS_NAME}
+- export DIST_DIR=kimg_${KIMG_TAG}_${TRAVIS_OS_NAME}
 - mkdir -p ${DIST_DIR}
 - cp -rp kimg kimg.yaml LICENSE www ${DIST_DIR}
 - tar cf ${DIST_DIR}.tar.gz ${DIST_DIR}
