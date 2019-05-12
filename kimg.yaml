@@ -100,6 +100,10 @@ image:
     - gif
     - webp
 
+  # The default fonts directory for text water mark.
+  #
+  # ENV KIMG_IMAGE_FONT_ROOT
+  fontRoot: fonts
 
 
 #

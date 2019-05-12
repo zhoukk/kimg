@@ -33,17 +33,18 @@ type KimgRequest struct {
 	OffsetY int    `json:"offset_y,omitempty"`
 
 	// watermark
-	Text        string `json:"text,omitempty"`
-	FontSize    int    `json:"font_size,omitempty"`
-	FontWeight  int    `json:"font_weight,omitempty"`
-	FontColor   string `json:"font_color,omitempty"`
-	StrokeColor string `json:"stroke_color,omitempty"`
-	StrokeWidth int    `json:"stroke_width,omitempty"`
-	TextGravity string `json:"text_gravity,omitempty"`
-	TextX       int    `json:"text_x,omitempty"`
-	TextY       int    `json:"text_y,omitempty"`
-	TextRotate  int    `json:"text_rotate,omitempty"`
-	TextOpacity int    `json:"text_opacity,omitempty"`
+	Text             string `json:"text,omitempty"`
+	Logo             string `json:"logo,omitempty"`
+	FontName         string `json:"font_name,omitempty"`
+	FontSize         int    `json:"font_size,omitempty"`
+	FontColor        string `json:"font_color,omitempty"`
+	StrokeColor      string `json:"stroke_color,omitempty"`
+	StrokeWidth      int    `json:"stroke_width,omitempty"`
+	WaterMarkGravity string `json:"watermark_gravity,omitempty"`
+	WaterMarkX       int    `json:"watermark_x,omitempty"`
+	WaterMarkY       int    `json:"watermark_y,omitempty"`
+	WaterMarkRotate  int    `json:"watermark_rotate,omitempty"`
+	WaterMarkOpacity int    `json:"watermark_opacity,omitempty"`
 
 	Format     string `json:"format,omitempty"`
 	Quality    int    `json:"quality,omitempty"`

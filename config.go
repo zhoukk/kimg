@@ -27,6 +27,7 @@ type KimgConfig struct {
 		Format       string   `yaml:"format,omitempty"`
 		Quality      int      `yaml:"quality,omitempty"`
 		AllowedTypes []string `yaml:"allowedTypes,omitempty"`
+		FontRoot     string   `yaml:"fontRoot,omitempty"`
 	} `yaml:"image,omitempty"`
 
 	Logger struct {
@@ -72,6 +73,7 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 	cfg.Image.Format = "jpeg"
 	cfg.Image.Quality = 75
 	cfg.Image.AllowedTypes = []string{"jpeg", "jpg", "png", "gif", "webp"}
+	cfg.Image.FontRoot = "fonts"
 
 	cfg.Logger.Mode = "console"
 	cfg.Logger.Level = "debug"

@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -307,13 +308,13 @@ func (ctx *KimgContext) genRequest(r *http.Request, md5Sum string) *KimgRequest 
 		req.Text = v[0]
 	}
 	if len(req.Text) > 0 {
-		if v, ok := r.Form["ts"]; ok {
+		if v, ok := r.Form["tf"]; ok {
+			req.FontName = filepath.Join(ctx.Config.Image.FontRoot, v[0])
+		}
+		if v, ok := r.Form["tfs"]; ok {
 			req.FontSize, _ = strconv.Atoi(v[0])
 		}
-		if v, ok := r.Form["tw"]; ok {
-			req.FontWeight, _ = strconv.Atoi(v[0])
-		}
-		if v, ok := r.Form["tc"]; ok && len(v[0]) == 6 {
+		if v, ok := r.Form["tfc"]; ok && len(v[0]) == 6 {
 			req.FontColor = "#" + v[0]
 		}
 		if v, ok := r.Form["tsc"]; ok && len(v[0]) == 6 {
@@ -322,21 +323,26 @@ func (ctx *KimgContext) genRequest(r *http.Request, md5Sum string) *KimgRequest 
 		if v, ok := r.Form["tsw"]; ok {
 			req.StrokeWidth, _ = strconv.Atoi(v[0])
 		}
-		if v, ok := r.Form["tg"]; ok {
-			req.TextGravity = v[0]
-		}
-		if v, ok := r.Form["tx"]; ok {
-			req.TextX, _ = strconv.Atoi(v[0])
-		}
-		if v, ok := r.Form["ty"]; ok {
-			req.TextY, _ = strconv.Atoi(v[0])
-		}
-		if v, ok := r.Form["tr"]; ok {
-			req.TextRotate, _ = strconv.Atoi(v[0])
-		}
-		if v, ok := r.Form["to"]; ok {
-			req.TextOpacity, _ = strconv.Atoi(v[0])
-		}
+	}
+
+	if v, ok := r.Form["l"]; ok {
+		req.Logo = v[0]
+	}
+
+	if v, ok := r.Form["wmg"]; ok {
+		req.WaterMarkGravity = v[0]
+	}
+	if v, ok := r.Form["wmx"]; ok {
+		req.WaterMarkX, _ = strconv.Atoi(v[0])
+	}
+	if v, ok := r.Form["wmy"]; ok {
+		req.WaterMarkY, _ = strconv.Atoi(v[0])
+	}
+	if v, ok := r.Form["wmr"]; ok {
+		req.WaterMarkRotate, _ = strconv.Atoi(v[0])
+	}
+	if v, ok := r.Form["wmo"]; ok {
+		req.WaterMarkOpacity, _ = strconv.Atoi(v[0])
 	}
 
 	if v, ok := r.Form["f"]; ok {
