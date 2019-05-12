@@ -10,7 +10,6 @@ type KimgStorage interface {
 	Set(req *KimgRequest, data []byte) error
 	Get(req *KimgRequest) ([]byte, error)
 	Del(req *KimgRequest) error
-	Release()
 }
 
 // KimgBaseStorage base storage struct hold kimg context.

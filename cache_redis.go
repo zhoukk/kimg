@@ -33,8 +33,6 @@ func NewKimgRedisCache(config *KimgConfig) (KimgCache, error) {
 	}, nil
 }
 
-func (cache *kimgRedisCache) Release() {}
-
 func (cache *kimgRedisCache) getConnect() (redis.Conn, error) {
 	conn := cache.pool.Get()
 	if conn == nil {

@@ -126,9 +126,6 @@ func NewKimgContext(configFile string) (*KimgContext, error) {
 // Release release resource in kimg context.
 func (ctx *KimgContext) Release() {
 	ctx.Image.Release()
-	ctx.Cache.Release()
-	ctx.Storage.Release()
-	ctx.Logger.Release()
 }
 
 // SaveImage save a image to kimg and make a kimg response.

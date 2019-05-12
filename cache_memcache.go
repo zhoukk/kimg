@@ -17,8 +17,6 @@ func NewKimgMemcacheCache(config *KimgConfig) (KimgCache, error) {
 	}, nil
 }
 
-func (cache *kimgMemcacheCache) Release() {}
-
 func (cache *kimgMemcacheCache) Set(key string, data []byte) error {
 	it := &memcache.Item{Key: key, Value: data}
 	return cache.client.Set(it)

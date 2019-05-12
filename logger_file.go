@@ -25,9 +25,3 @@ func NewKimgFileLogger(config *KimgConfig) (KimgLogger, error) {
 		},
 	}, nil
 }
-
-func (logger *kimgFileLogger) Release() {
-	if logger.logFile != nil {
-		logger.logFile.Close()
-	}
-}

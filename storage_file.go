@@ -24,8 +24,6 @@ func NewKimgFileStorage(ctx *KimgContext) (KimgStorage, error) {
 	}, nil
 }
 
-func (storage *kimgFileStorage) Release() {}
-
 func (storage *kimgFileStorage) Set(req *KimgRequest, data []byte) error {
 	imageDir, imageFile := storage.imageDirAndFile(req)
 

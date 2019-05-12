@@ -29,8 +29,6 @@ func NewKimgMemoryCache(config *KimgConfig) (KimgCache, error) {
 	}, nil
 }
 
-func (cache *kimgMemoryCache) Release() {}
-
 func (cache *kimgMemoryCache) Set(key string, data []byte) error {
 	cache.mtx.Lock()
 	defer cache.mtx.Unlock()

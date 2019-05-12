@@ -11,7 +11,6 @@ type KimgLogger interface {
 	Info(format string, v ...interface{})
 	Warn(format string, v ...interface{})
 	Error(format string, v ...interface{})
-	Release()
 }
 
 // KimgBaseLogger base logger struct hold golang logger.

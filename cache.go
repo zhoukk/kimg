@@ -7,7 +7,6 @@ type KimgCache interface {
 	Set(key string, data []byte) error
 	Get(key string) ([]byte, error)
 	Del(key string) error
-	Release()
 }
 
 // NewKimgCache create a cache instance according to cache mode in config.

@@ -70,19 +70,7 @@ func (image *KimgImagick) Info(req *KimgRequest, data []byte) (*KimgResponse, er
 	orientationType := mw.GetImageOrientation()
 
 	if "GIF" == format {
-		aw := mw.CoalesceImages()
-		defer aw.Destroy()
-		for i := 0; i < int(aw.GetNumberImages()); i++ {
-			aw.SetIteratorIndex(i)
-			w := aw.GetImageWidth()
-			h := aw.GetImageHeight()
-			if w > width {
-				width = w
-			}
-			if h > height {
-				height = h
-			}
-		}
+		width, height, _, _, _ = mw.GetImagePage()
 	} else {
 		width = mw.GetImageWidth()
 		height = mw.GetImageHeight()
@@ -151,8 +139,8 @@ func (image *KimgImagick) Convert(data []byte, req KimgRequest) ([]byte, error) 
 	if "GIF" == format {
 		delay := mw.GetImageDelay()
 		aw := mw.CoalesceImages()
-		mw.Destroy()
 		defer aw.Destroy()
+		mw.Destroy()
 
 		mw = imagick.NewMagickWand()
 		mw.SetImageDelay(delay)

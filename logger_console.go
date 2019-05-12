@@ -18,5 +18,3 @@ func NewKimgConsoleLogger(config *KimgConfig) (KimgLogger, error) {
 		},
 	}, nil
 }
-
-func (logger *kimgConsoleLogger) Release() {}
