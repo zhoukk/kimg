@@ -1,4 +1,15 @@
-# [](https://github.com/zhoukk/kimg/compare/v0.4.0...v) (2019-05-11)
+## [0.4.1](https://github.com/zhoukk/kimg/compare/v0.4.0...v0.4.1) (2019-05-12)
+
+
+### Features
+
+* **watermark:** enhance watermark ([415f87f](https://github.com/zhoukk/kimg/commit/415f87f))
+
+
+### BREAKING CHANGES
+
+* **watermark:** changed watermark params in url query
+
 
 
 
