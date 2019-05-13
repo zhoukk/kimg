@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layout } from 'antd';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import pkg from '../../package.json';
 import styles from './index.css'
 
@@ -9,7 +10,7 @@ function BasicLayout(props) {
   return (
     <Layout className={styles.page}>
       <Header className={styles.header}>
-        <div className={styles.title}>Welcome to Kimg <span className={styles.version}>v{pkg.version}</span></div>
+        <div className={styles.title}><FormattedMessage id="WELCOME_TO_KIMG"/> <span className={styles.version}>v{pkg.version}</span></div>
       </Header>
       <Content className={styles.content}>
         {props.children}

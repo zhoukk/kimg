@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import { Alert, Button, Card, Collapse, Divider, Empty, Form, Radio, Upload, Popconfirm, Icon, Input, InputNumber, Tabs, Row, Col, Slider, Switch, Statistic, message } from 'antd';
 
 import qs from 'querystring';
@@ -14,7 +15,7 @@ const Panel = Collapse.Panel;
 const defaultQuery = {
   s: false, sm: 'fit', sw: 200, sh: 200, sp: 50, swp: 50, shp: 50,
   c: false, cg: 'c', cw: 200, ch: 200, co: 'lt', cx: 10, cy: 10,
-  wm: false, t: 'kimg', ts: 16, tw: 0, tc: '', tsc: '', tsw: 1, tg: 'se', tx: 10, ty: 10, tr: 0, to: 80,
+  wm: false, t: 'kimg', l: '', tf: '', tfs: 16, tfc: '', tsc: '', tsw: 0, wmg: 'se', wmx: 10, wmy: 10, wmr: 0, wmo: 80,
   r: 0, bc: '', g: false, q: 75, ao: true, st: true, f: 'jpg',
 }
 
@@ -93,47 +94,47 @@ const ImageBasicQueryForm = Form.create({
 
   return (
     <Form labelCol={{ xs: { span: 24 }, sm: { span: 6 } }} wrapperCol={{ xs: { span: 24 }, sm: { span: 16, offset: 2 } }}>
-      <FormItem label="Rotate">
+      <FormItem label={formatMessage({ id: 'ROTATE' })}>
         {getFieldDecorator('r', { initialValue: defaultQuery.r })(
           <InputNumber min={0} max={360} />
         )}
       </FormItem>
-      <FormItem label="Background" wrapperCol={{ span: 8, offset: 2 }}>
+      <FormItem label={formatMessage({ id: 'BACKGROUND' })} wrapperCol={{ span: 8, offset: 2 }}>
         {getFieldDecorator('bc', { initialValue: defaultQuery.bc })(
           <Input prefix='#' addonAfter={<Icon style={{ color: `#${bc}` }} type="bg-colors" />} />
         )}
       </FormItem>
       <Divider />
-      <FormItem label="Gray">
+      <FormItem label={formatMessage({ id: 'GRAY' })}>
         {getFieldDecorator('g', { initialValue: defaultQuery.g })(
           <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={false} />
         )}
       </FormItem>
       <Divider />
-      <FormItem label="Quality">
+      <FormItem label={formatMessage({ id: 'QUALITY' })}>
         {getFieldDecorator('q', { initialValue: defaultQuery.q })(
           <IntegerStep />
         )}
       </FormItem>
       <Divider />
-      <FormItem label="AutoOrient">
+      <FormItem label={formatMessage({ id: 'AUTO_ORIENT' })}>
         {getFieldDecorator('ao', { initialValue: defaultQuery.ao })(
           <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={true} />
         )}
       </FormItem>
-      <FormItem label="Strip">
+      <FormItem label={formatMessage({ id: 'STRIP' })}>
         {getFieldDecorator('st', { initialValue: defaultQuery.st })(
           <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={true} />
         )}
       </FormItem>
-      <FormItem label="Format">
+      <FormItem label={formatMessage({ id: 'OUTPUT_FORMAT' })}>
         {getFieldDecorator('f', { initialValue: defaultQuery.f })(
           <RadioGroup buttonStyle="solid">
-            <RadioButton value='none'>NONE</RadioButton>
-            <RadioButton value='jpg'>JPG</RadioButton>
-            <RadioButton value='png'>PNG</RadioButton>
-            <RadioButton value='webp'>WEBP</RadioButton>
-            <RadioButton value='gif'>GIF</RadioButton>
+            <RadioButton value='none'><FormattedMessage id='FORMAT_NONE' /></RadioButton>
+            <RadioButton value='jpg'><FormattedMessage id='FORMAT_JPG' /></RadioButton>
+            <RadioButton value='png'><FormattedMessage id='FORMAT_PNG' /></RadioButton>
+            <RadioButton value='webp'><FormattedMessage id='FORMAT_WEBP' /></RadioButton>
+            <RadioButton value='gif'><FormattedMessage id='FORMAT_GIF' /></RadioButton>
           </RadioGroup>
         )}
       </FormItem>
@@ -175,12 +176,12 @@ const ImageScaleQueryForm = Form.create({
 
   return (
     <Form labelCol={{ xs: { span: 24 }, sm: { span: 6 } }} wrapperCol={{ xs: { span: 24 }, sm: { span: 16, offset: 2 } }}>
-      <FormItem label="Scale Enable">
+      <FormItem label={formatMessage({ id: 'SCALE_ENABLE' })}>
         {getFieldDecorator('s', { initialValue: defaultQuery.s })(
           <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={false} />
         )}
       </FormItem>
-      <FormItem label="Scale Mode">
+      <FormItem label={formatMessage({ id: 'SCALE_MODE' })}>
         {getFieldDecorator('sm', { initialValue: defaultQuery.sm })(
           <RadioGroup disabled={!enableScale} buttonStyle="solid">
             <RadioButton value='fit'>FIT</RadioButton>
@@ -188,27 +189,27 @@ const ImageScaleQueryForm = Form.create({
           </RadioGroup>
         )}
       </FormItem>
-      <FormItem label="Scale Width">
+      <FormItem label={formatMessage({ id: 'SCALE_WIDTH' })}>
         {getFieldDecorator('sw', { initialValue: defaultQuery.sw })(
           <InputNumber min={0} disabled={!enableScale} />
         )}
       </FormItem>
-      <FormItem label="Scale Height">
+      <FormItem label={formatMessage({ id: 'SCALE_HEIGHT' })}>
         {getFieldDecorator('sh', { initialValue: defaultQuery.sh })(
           <InputNumber min={0} disabled={!enableScale} />
         )}
       </FormItem>
-      <FormItem label="Scale Percent">
+      <FormItem label={formatMessage({ id: 'SCALE_PERCENT' })}>
         {getFieldDecorator('sp', { initialValue: defaultQuery.sp })(
           <InputNumber min={0} disabled={!enableScale} />
         )}
       </FormItem>
-      <FormItem label="Width Percent">
+      <FormItem label={formatMessage({ id: 'SCALE_WIDTH_PERCENT' })}>
         {getFieldDecorator('swp', { initialValue: defaultQuery.swp })(
           <InputNumber min={0} disabled={!enableScale} />
         )}
       </FormItem>
-      <FormItem label="Height Percent">
+      <FormItem label={formatMessage({ id: 'SCALE_HEIGHT_PERCENT' })}>
         {getFieldDecorator('shp', { initialValue: defaultQuery.shp })(
           <InputNumber min={0} disabled={!enableScale} />
         )}
@@ -251,62 +252,62 @@ const ImageCropQueryForm = Form.create({
 
   return (
     <Form labelCol={{ xs: { span: 24 }, sm: { span: 6 } }} wrapperCol={{ xs: { span: 24 }, sm: { span: 16, offset: 2 } }}>
-      <FormItem label="Crop Enable">
+      <FormItem label={formatMessage({ id: 'CROP_ENABLE' })}>
         {getFieldDecorator('c', { initialValue: defaultQuery.c })(
           <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={false} />
         )}
       </FormItem>
-      <FormItem label="Crop Gravity">
+      <FormItem label={formatMessage({ id: 'CROP_GRAVITY' })}>
         {getFieldDecorator('cg', { initialValue: defaultQuery.cg })(
           <RadioGroup buttonStyle="solid" disabled={!enableCrop}>
             <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='nw'>NW</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='n'>N</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='ne'>NE</RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='nw'><FormattedMessage id='GRAVITY_NW' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='n'><FormattedMessage id='GRAVITY_N' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='ne'><FormattedMessage id='GRAVITY_NE' /></RadioButton>
             </div>
             <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='w'>W</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='c'>C</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='e'>E</RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='w'><FormattedMessage id='GRAVITY_W' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='c'><FormattedMessage id='GRAVITY_C' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='e'><FormattedMessage id='GRAVITY_E' /></RadioButton>
             </div>
             <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='sw'>SW</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='s'>S</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='se'>SE</RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='sw'><FormattedMessage id='GRAVITY_SW' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='s'><FormattedMessage id='GRAVITY_S' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='se'><FormattedMessage id='GRAVITY_SE' /></RadioButton>
             </div>
           </RadioGroup>
         )}
       </FormItem>
-      <FormItem label="Crop Width">
+      <FormItem label={formatMessage({ id: 'CROP_WIDTH' })}>
         {getFieldDecorator('cw', { initialValue: defaultQuery.cw })(
           <InputNumber min={0} disabled={!enableCrop} />
         )}
       </FormItem>
-      <FormItem label="Crop Height">
+      <FormItem label={formatMessage({ id: 'CROP_HEIGHT' })}>
         {getFieldDecorator('ch', { initialValue: defaultQuery.ch })(
           <InputNumber min={0} disabled={!enableCrop} />
         )}
       </FormItem>
-      <FormItem label="Offset Mode">
+      <FormItem label={formatMessage({ id: 'OFFSET_MODE' })}>
         {getFieldDecorator('co', { initialValue: defaultQuery.co })(
           <RadioGroup buttonStyle="solid" disabled={!enableCrop}>
             <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='lt'>LT</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='lb'>LB</RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='lt'><FormattedMessage id='CROP_LT' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='rt'><FormattedMessage id='CROP_RT' /></RadioButton>
             </div>
             <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='rt'>RT</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='rb'>RB</RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='lb'><FormattedMessage id='CROP_LB' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='rb'><FormattedMessage id='CROP_RB' /></RadioButton>
             </div>
           </RadioGroup>
         )}
       </FormItem>
-      <FormItem label="Offset X">
+      <FormItem label={formatMessage({ id: 'OFFSET_X' })}>
         {getFieldDecorator('cx', { initialValue: defaultQuery.cx })(
           <InputNumber min={0} disabled={!enableCrop} />
         )}
       </FormItem>
-      <FormItem label="Offset Y">
+      <FormItem label={formatMessage({ id: 'OFFSET_Y' })}>
         {getFieldDecorator('cy', { initialValue: defaultQuery.cy })(
           <InputNumber min={0} disabled={!enableCrop} />
         )}
@@ -319,37 +320,44 @@ const ImageCropQueryForm = Form.create({
 const ImageWaterMarkQueryForm = Form.create({
   onValuesChange(props, _, values) {
     const q = {}
-    if (values.wm && values.t) {
-      q.t = values.t
-      if (values.ts > 0) {
-        q.ts = values.ts
+    if (values.wm) {
+      if (values.t.length > 0) {
+        q.t = values.t
+        if (values.tf.length > 0) {
+          q.tf = values.tf
+        }
+        if (values.tfs > 0) {
+          q.tfs = values.tfs
+        }
+        if (values.tfc.length === 6) {
+          q.tfc = values.tfc
+        }
+        if (values.tsc.length === 6) {
+          q.tsc = values.tsc
+        }
+        if (values.tsw > 0) {
+          q.tsw = values.tsw
+        }
       }
-      if (values.tw > 0) {
-        q.tw = values.tw
+
+      if (values.l.length > 0) {
+        q.l = values.l
       }
-      if (values.tc.length === 6) {
-        q.tc = values.tc
+
+      if (values.wmg) {
+        q.wmg = values.wmg
       }
-      if (values.tsc.length === 6) {
-        q.tsc = values.tsc
+      if (values.wmx > 0) {
+        q.wmx = values.wmx
       }
-      if (values.tsw > 0) {
-        q.tsw = values.tsw
+      if (values.wmy > 0) {
+        q.wmy = values.wmy
       }
-      if (values.tg) {
-        q.tg = values.tg
+      if (values.wmr > 0) {
+        q.wmr = values.wmr
       }
-      if (values.tx > 0) {
-        q.tx = values.tx
-      }
-      if (values.ty > 0) {
-        q.ty = values.ty
-      }
-      if (values.tr > 0) {
-        q.tr = values.tr
-      }
-      if (values.to > 0) {
-        q.to = values.to
+      if (values.wmo > 0) {
+        q.wmo = values.wmo
       }
     }
     props.onChange('watermark', q)
@@ -360,9 +368,9 @@ const ImageWaterMarkQueryForm = Form.create({
 
   const enableWaterMark = getFieldValue('wm')
 
-  let tc = getFieldValue('tc')
-  if (!tc || tc.length < 6) {
-    tc = '000000'
+  let tfc = getFieldValue('tfc')
+  if (!tfc || tfc.length < 6) {
+    tfc = '000000'
   }
   let tsc = getFieldValue('tsc')
   if (!tsc || tsc.length < 6) {
@@ -371,79 +379,84 @@ const ImageWaterMarkQueryForm = Form.create({
 
   return (
     <Form labelCol={{ xs: { span: 24 }, sm: { span: 6 } }} wrapperCol={{ xs: { span: 24 }, sm: { span: 16, offset: 2 } }}>
-      <FormItem label="WaterMark Enable">
+      <FormItem label={formatMessage({ id: 'WATERMARK_ENABLE' })}>
         {getFieldDecorator('wm', { initialValue: defaultQuery.wm })(
           <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={false} />
         )}
       </FormItem>
-      <FormItem label="Text" wrapperCol={{ span: 8, offset: 2 }}>
+      <FormItem label={formatMessage({ id: 'WATERMARK_TEXT' })} wrapperCol={{ span: 8, offset: 2 }}>
         {getFieldDecorator('t', { initialValue: defaultQuery.t })(
-          <Input placeholder='text watermark' disabled={!enableWaterMark} />
+          <Input disabled={!enableWaterMark} />
         )}
       </FormItem>
-      <FormItem label="FontSize">
-        {getFieldDecorator('ts', { initialValue: defaultQuery.ts })(
+      <FormItem label={formatMessage({ id: 'WATERMARK_FONT_NAME' })} wrapperCol={{ span: 8, offset: 2 }}>
+        {getFieldDecorator('tf', { initialValue: defaultQuery.tf })(
+          <Input disabled={!enableWaterMark} />
+        )}
+      </FormItem>
+      <FormItem label={formatMessage({ id: 'WATERMARK_FONT_SIZE' })}>
+        {getFieldDecorator('tfs', { initialValue: defaultQuery.tfs })(
           <InputNumber min={0} disabled={!enableWaterMark} />
         )}
       </FormItem>
-      <FormItem label="FontWeight">
-        {getFieldDecorator('tw', { initialValue: defaultQuery.tw })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
+      <FormItem label={formatMessage({ id: 'WATERMARK_FONT_COLOR' })} wrapperCol={{ span: 8, offset: 2 }}>
+        {getFieldDecorator('tfc', { initialValue: defaultQuery.tfc })(
+          <Input prefix='#' addonAfter={<Icon style={{ color: `#${tfc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
         )}
       </FormItem>
-      <FormItem label="FontColor" wrapperCol={{ span: 8, offset: 2 }}>
-        {getFieldDecorator('tc', { initialValue: defaultQuery.tc })(
-          <Input prefix='#' addonAfter={<Icon style={{ color: `#${tc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label="Stroke Color" wrapperCol={{ span: 8, offset: 2 }}>
+      <FormItem label={formatMessage({ id: 'WATERMARK_STROKE_COLOR' })} wrapperCol={{ span: 8, offset: 2 }}>
         {getFieldDecorator('tsc', { initialValue: defaultQuery.tsc })(
           <Input prefix='#' addonAfter={<Icon style={{ color: `#${tsc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
         )}
       </FormItem>
-      <FormItem label="Stroke Width">
+      <FormItem label={formatMessage({ id: 'WATERMARK_STROKE_WIDTH' })}>
         {getFieldDecorator('tsw', { initialValue: defaultQuery.tsw })(
           <InputNumber min={0} disabled={!enableWaterMark} />
         )}
       </FormItem>
-      <FormItem label="Gravity">
-        {getFieldDecorator('tg', { initialValue: defaultQuery.tg })(
+      <FormItem label={formatMessage({ id: 'WATERMARK_LOGO' })} wrapperCol={{ span: 12, offset: 2 }}>
+        {getFieldDecorator('l', { initialValue: defaultQuery.l })(
+          <Input disabled={!enableWaterMark} />
+        )}
+      </FormItem>
+      <FormItem label={formatMessage({ id: 'WATERMARK_GRAVITY' })}>
+        {getFieldDecorator('wmg', { initialValue: defaultQuery.wmg })(
           <RadioGroup buttonStyle="solid" disabled={!enableWaterMark}>
             <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='nw'>NW</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='n'>N</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='ne'>NE</RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='nw'><FormattedMessage id='GRAVITY_NW' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='n'><FormattedMessage id='GRAVITY_N' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='ne'><FormattedMessage id='GRAVITY_NE' /></RadioButton>
             </div>
             <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='w'>W</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='c'>C</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='e'>E</RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='w'><FormattedMessage id='GRAVITY_W' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='c'><FormattedMessage id='GRAVITY_C' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='e'><FormattedMessage id='GRAVITY_E' /></RadioButton>
             </div>
             <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='sw'>SW</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='s'>S</RadioButton>
-              <RadioButton style={{ width: 50, borderRadius: 0 }} value='se'>SE</RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='sw'><FormattedMessage id='GRAVITY_SW' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='s'><FormattedMessage id='GRAVITY_S' /></RadioButton>
+              <RadioButton style={{ width: 60, borderRadius: 0 }} value='se'><FormattedMessage id='GRAVITY_SE' /></RadioButton>
             </div>
           </RadioGroup>
         )}
       </FormItem>
-      <FormItem label="X">
-        {getFieldDecorator('tx', { initialValue: defaultQuery.tx })(
+      <FormItem label={formatMessage({ id: 'WATERMARK_X' })}>
+        {getFieldDecorator('wmx', { initialValue: defaultQuery.wmx })(
           <InputNumber min={0} disabled={!enableWaterMark} />
         )}
       </FormItem>
-      <FormItem label="Y">
-        {getFieldDecorator('ty', { initialValue: defaultQuery.ty })(
+      <FormItem label={formatMessage({ id: 'WATERMARK_Y' })}>
+        {getFieldDecorator('wmy', { initialValue: defaultQuery.wmy })(
           <InputNumber min={0} disabled={!enableWaterMark} />
         )}
       </FormItem>
-      <FormItem label="Rotate">
-        {getFieldDecorator('tr', { initialValue: defaultQuery.tr })(
+      <FormItem label={formatMessage({ id: 'WATERMARK_ROTATE' })}>
+        {getFieldDecorator('wmr', { initialValue: defaultQuery.wmr })(
           <InputNumber min={0} disabled={!enableWaterMark} />
         )}
       </FormItem>
-      <FormItem label="Opacity">
-        {getFieldDecorator('to', { initialValue: defaultQuery.to })(
+      <FormItem label={formatMessage({ id: 'WATERMARK_OPACITY' })}>
+        {getFieldDecorator('wmo', { initialValue: defaultQuery.wmo })(
           <InputNumber min={0} disabled={!enableWaterMark} />
         )}
       </FormItem>
@@ -466,14 +479,14 @@ export default class extends PureComponent {
   onChange = info => {
     const status = info.file.status;
     if (status === 'done') {
-      message.success(`${info.file.name} uploaded successfully.`);
+      message.success(formatMessage({ id: 'SUCCESS_UPLOAD_IMAGE' }, { name: info.file.name }));
       this.setState({
         md5sum: info.file.response.md5,
         originUrl: `/image/${info.file.response.md5}?origin=1`,
         originInfo: info.file.response
       })
     } else if (status === 'error') {
-      message.error(`${info.file.name} upload failed.`);
+      message.error(formatMessage({ id: 'ERR_UPLOAD_IMAGE' }, { name: info.file.name }));
     }
   }
 
@@ -503,15 +516,18 @@ export default class extends PureComponent {
 
   deleteImage = () => {
     const { md5sum } = this.state
+    if ('' === md5sum) {
+      return
+    }
     fetch(`/image/${md5sum}`, { method: 'DELETE' }).then(() => {
-      message.success(`delete image ${md5sum} successfully.`);
+      message.success(formatMessage({ id: 'SUCCESS_DELETE_IMAGE' }, { md5sum }));
       this.setState({
         md5sum: '', originUrl: '', imageUrl: '',
         originInfo: { size: 0, width: 0, height: 0, format: '' },
         imageInfo: { size: 0, width: 0, height: 0, format: '' }
       })
     }).catch(e => {
-      message.error(`delete image ${md5sum} failed.`);
+      message.error(formatMessage({ id: 'ERR_DELETE_IMAGE' }, { md5sum }));
       console.log(e)
     })
   }
@@ -527,8 +543,8 @@ export default class extends PureComponent {
         <p className="ant-upload-drag-icon">
           <Icon type="inbox" />
         </p>
-        <p className="ant-upload-text">Click or drag image file to this area to upload</p>
-        <p className="ant-upload-hint">Support for a single upload.</p>
+        <p className="ant-upload-text"><FormattedMessage id='TEXT_UPLOAD' /></p>
+        <p className="ant-upload-hint"><FormattedMessage id='HINT_UPLOAD' /></p>
       </Dragger>
     )
   }
@@ -566,7 +582,7 @@ export default class extends PureComponent {
         onError={() => {
           const { md5sum, originUrl } = this.state
           if (url === originUrl) {
-            message.error(`load image ${md5sum} failed.`);
+            message.error(formatMessage({ id: 'ERR_LOAD_IMAGE' }, { md5sum }));
             this.setState({ md5sum: '', originUrl: '' })
           }
         }}
@@ -586,16 +602,16 @@ export default class extends PureComponent {
               title={
                 <Row>
                   <Col span={6}>
-                    <Statistic value={originInfo.size / 1024} precision={2} title='size' suffix='kb' />
+                    <Statistic value={originInfo.size / 1024} precision={2} title={formatMessage({ id: 'SIZE' })} suffix='kb' />
                   </Col>
                   <Col span={6}>
-                    <Statistic value={originInfo.width} title='width' />
+                    <Statistic value={originInfo.width} title={formatMessage({ id: 'WIDTH' })} />
                   </Col>
                   <Col span={6}>
-                    <Statistic value={originInfo.height} title='height' />
+                    <Statistic value={originInfo.height} title={formatMessage({ id: 'HEIGHT' })} />
                   </Col>
                   <Col span={6}>
-                    <Statistic value={originInfo.format} title='format' />
+                    <Statistic value={originInfo.format} title={formatMessage({ id: 'FORMAT' })} />
                   </Col>
                 </Row>
               }>
@@ -609,7 +625,7 @@ export default class extends PureComponent {
                 action='/image'
                 onChange={this.onChange}
               >
-                <Button type="primary" shape="round" icon="upload">Upload</Button>
+                <Button type="primary" shape="round" icon="upload"><FormattedMessage id='BTN_UPLOAD' /></Button>
               </Upload>
             </Divider>
           </Col>
@@ -620,27 +636,27 @@ export default class extends PureComponent {
               defaultActiveKey={['convert']}
               expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
             >
-              <Panel header="Convert Panel" key="convert" style={{ border: 0 }}>
+              <Panel header={formatMessage({ id: 'CONVERT_PANEL' })} key="convert" style={{ border: 0 }}>
                 <Tabs defaultActiveKey="basic">
-                  <TabPane tab="Basic" key="basic">
+                  <TabPane tab={formatMessage({ id: 'TAB_BASIC' })} key="basic">
                     <ImageBasicQueryForm onChange={this.onImageQueryChange} />
                   </TabPane>
-                  <TabPane tab="Scale" key="scale">
+                  <TabPane tab={formatMessage({ id: 'TAB_SCALE' })} key="scale">
                     <ImageScaleQueryForm onChange={this.onImageQueryChange} />
                   </TabPane>
-                  <TabPane tab="Crop" key="crop">
+                  <TabPane tab={formatMessage({ id: 'TAB_CROP' })} key="crop">
                     <ImageCropQueryForm onChange={this.onImageQueryChange} />
                   </TabPane>
-                  <TabPane tab="WaterMark" key="watermark">
+                  <TabPane tab={formatMessage({ id: 'TAB_WATERMARK' })} key="watermark">
                     <ImageWaterMarkQueryForm onChange={this.onImageQueryChange} />
                   </TabPane>
                 </Tabs>
               </Panel>
-              <Panel header="Admin Panel" key="admin" style={{ border: 0 }}>
-                <Card size='small' title='Load Image From Kimg By Md5sum'>
+              <Panel header={formatMessage({ id: 'ADMIN_PANEL' })} key="admin" style={{ border: 0 }}>
+                <Card size='small' title={formatMessage({ id: 'LOAD_IMAGE_BY_MD5' })}>
                   <Search defaultValue={md5sum} placeholder='md5sum' size="large" onSearch={md5sum => {
                     if (md5sum.length !== 32) {
-                      message.error(`invalid image md5sum: ${md5sum}.`);
+                      message.error(formatMessage({ id: 'ERR_INVALID_IMAGE' }, { md5sum }));
                       return
                     }
                     this.setState({
@@ -649,8 +665,8 @@ export default class extends PureComponent {
                     })
                   }} />
                   <Divider>
-                    <Popconfirm title="Are you sure delete this image?" onConfirm={this.deleteImage}>
-                      <Button icon='delete' disabled={md5sum === ''} >DELETE</Button>
+                    <Popconfirm title={formatMessage({ id: 'DELETE_IMAGE_CONFIRM' })} onConfirm={this.deleteImage}>
+                      <Button icon='delete' disabled={md5sum === ''} ><FormattedMessage id='BTN_DELETE' /></Button>
                     </Popconfirm>
                   </Divider>
                 </Card>
@@ -663,16 +679,16 @@ export default class extends PureComponent {
               title={
                 <Row>
                   <Col span={6}>
-                    <Statistic value={imageInfo.size / 1024} precision={2} title='size' suffix='kb' />
+                    <Statistic value={imageInfo.size / 1024} precision={2} title={formatMessage({ id: 'SIZE' })} suffix='kb' />
                   </Col>
                   <Col span={6}>
-                    <Statistic value={imageInfo.width} title='width' />
+                    <Statistic value={imageInfo.width} title={formatMessage({ id: 'WIDTH' })} />
                   </Col>
                   <Col span={6}>
-                    <Statistic value={imageInfo.height} title='height' />
+                    <Statistic value={imageInfo.height} title={formatMessage({ id: 'HEIGHT' })} />
                   </Col>
                   <Col span={6}>
-                    <Statistic value={imageInfo.format} title='format' />
+                    <Statistic value={imageInfo.format} title={formatMessage({ id: 'FORMAT' })} />
                   </Col>
                 </Row>
               }>

@@ -352,8 +352,8 @@ func (image *KimgImagick) crop(mw *imagick.MagickWand, req *KimgRequest) error {
 
 	switch req.Offset {
 	case "lt":
-		x += req.OffsetX
-		y += req.OffsetY
+		x -= req.OffsetX
+		y -= req.OffsetY
 	case "lb":
 		x -= req.OffsetX
 		y += req.OffsetY
@@ -361,8 +361,8 @@ func (image *KimgImagick) crop(mw *imagick.MagickWand, req *KimgRequest) error {
 		x += req.OffsetX
 		y -= req.OffsetY
 	case "rb":
-		x -= req.OffsetX
-		y -= req.OffsetY
+		x += req.OffsetX
+		y += req.OffsetY
 	}
 
 	if err := mw.CropImage(uint(req.CropW), uint(req.CropH), x, y); err != nil {

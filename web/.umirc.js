@@ -28,6 +28,7 @@ export default {
       dynamicImport: { webpackChunkName: true },
       title: 'kimg',
       dll: true,
+      locale: {},
 
       routes: {
         exclude: [
