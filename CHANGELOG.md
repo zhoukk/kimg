@@ -1,3 +1,12 @@
+## [0.4.2](https://github.com/zhoukk/kimg/compare/v0.4.1...v0.4.2) (2019-05-13)
+
+
+### Features
+
+* **locale:** support language en_US, zh_CN ([a2398e6](https://github.com/zhoukk/kimg/commit/a2398e6))
+
+
+
 ## [0.4.1](https://github.com/zhoukk/kimg/compare/v0.4.0...v0.4.1) (2019-05-12)
 
 
