@@ -1,3 +1,12 @@
+## [0.4.3](https://github.com/zhoukk/kimg/compare/v0.4.2...v0.4.3) (2019-05-14)
+
+
+### Bug Fixes
+
+* **watermark:** fix watermark operator in web ([f0c2696](https://github.com/zhoukk/kimg/commit/f0c2696))
+
+
+
 ## [0.4.2](https://github.com/zhoukk/kimg/compare/v0.4.1...v0.4.2) (2019-05-13)
 
 
