@@ -77,7 +77,7 @@ func (image *KimgImagick) Info(req *KimgRequest, data []byte) (*KimgResponse, er
 	}
 
 	exif := make(map[string]string)
-	names := mw.GetImageProperties("*")
+	names := mw.GetImageProperties("exif:*")
 	for _, name := range names {
 		exif[name] = mw.GetImageProperty(name)
 	}
@@ -186,15 +186,19 @@ func (image *KimgImagick) convertImage(mw *imagick.MagickWand, req *KimgRequest)
 	if req.Rotate != 0 {
 		background := imagick.NewPixelWand()
 		defer background.Destroy()
-		if len(req.BGColor) > 0 && !background.SetColor(req.BGColor) {
+		if len(req.BGColor) == 0 {
+			req.BGColor = "transparent"
+		}
+		if !background.SetColor(req.BGColor) {
 			image.ctx.Logger.Warn("background.SetColor %s failed", req.BGColor)
-			return errors.New("background.SetColor failed")
+		} else {
+			image.ctx.Logger.Debug("background.SetColor %s", req.BGColor)
 		}
 		if err := mw.RotateImage(background, float64(req.Rotate)); err != nil {
 			image.ctx.Logger.Warn("RotateImage %f, err: %s", req.Rotate, err)
 			return err
 		}
-		image.ctx.Logger.Debug("RotateImage %d #%s", req.Rotate, req.BGColor)
+		image.ctx.Logger.Debug("RotateImage %d %s", req.Rotate, req.BGColor)
 	}
 
 	if len(req.Text) > 0 || len(req.Logo) > 0 {
@@ -374,19 +378,55 @@ func (image *KimgImagick) crop(mw *imagick.MagickWand, req *KimgRequest) error {
 }
 
 func (image *KimgImagick) waterMark(mw *imagick.MagickWand, req *KimgRequest) error {
-	dw := imagick.NewDrawingWand()
-	pw := imagick.NewPixelWand()
-	defer dw.Destroy()
-	defer pw.Destroy()
 
-	if gravity, ok := gravityMaps[req.WaterMarkGravity]; ok {
-		dw.SetGravity(gravity)
-	}
-	if req.WaterMarkOpacity > 0 {
-		dw.SetOpacity(float64(req.WaterMarkOpacity) / 100.0)
+	if len(req.Logo) > 0 {
+		logoMW := imagick.NewMagickWand()
+		defer logoMW.Destroy()
+		if err := logoMW.ReadImage(req.Logo); err != nil {
+			image.ctx.Logger.Warn("ReadImage %s, err: %s", req.Logo, err)
+			return err
+		}
+
+		dw := imagick.NewDrawingWand()
+		pw := imagick.NewPixelWand()
+		defer dw.Destroy()
+		defer pw.Destroy()
+
+		if gravity, ok := gravityMaps[req.WaterMarkGravity]; ok {
+			dw.SetGravity(gravity)
+			image.ctx.Logger.Debug("SetGravity %s", req.WaterMarkGravity)
+		}
+		if req.WaterMarkOpacity > 0 {
+			logoMW.ShadowImage(float64(req.WaterMarkOpacity), 0, 0, 0)
+		}
+		if req.WaterMarkRotate > 0 {
+			dw.Rotate(float64(req.WaterMarkRotate))
+			image.ctx.Logger.Debug("Rotate %d", req.WaterMarkRotate)
+		}
+
+		if err := dw.Composite(imagick.COMPOSITE_OP_OVER, float64(req.WaterMarkX), float64(req.WaterMarkY), float64(req.LogoW), float64(req.LogoH), logoMW); err != nil {
+			image.ctx.Logger.Warn("Composite %d %d %d %d, err: %s", req.WaterMarkX, req.WaterMarkY, req.LogoW, req.LogoH, err)
+			return err
+		}
+		image.ctx.Logger.Debug("Composite %d %d %d %d", req.WaterMarkX, req.WaterMarkY, req.LogoW, req.LogoH)
+
+		if err := mw.DrawImage(dw); err != nil {
+			image.ctx.Logger.Warn("DrawImage err: %s", err)
+			return err
+		}
+		image.ctx.Logger.Debug("DrawImage")
 	}
 
 	if len(req.Text) > 0 {
+		dw := imagick.NewDrawingWand()
+		pw := imagick.NewPixelWand()
+		defer dw.Destroy()
+		defer pw.Destroy()
+
+		if gravity, ok := gravityMaps[req.WaterMarkGravity]; ok {
+			dw.SetGravity(gravity)
+			image.ctx.Logger.Debug("SetGravity %s", req.WaterMarkGravity)
+		}
 		if len(req.FontName) > 0 {
 			if err := dw.SetFont(req.FontName); err != nil {
 				image.ctx.Logger.Warn("SetFont %s, err: %s", req.FontName, err)
@@ -400,42 +440,35 @@ func (image *KimgImagick) waterMark(mw *imagick.MagickWand, req *KimgRequest) er
 		}
 		if len(req.FontColor) > 0 {
 			if pw.SetColor(req.FontColor) {
+				image.ctx.Logger.Debug("SetAlpha %d", req.WaterMarkOpacity)
 				dw.SetFillColor(pw)
 				image.ctx.Logger.Debug("SetFillColor %s", req.FontColor)
 			} else {
 				image.ctx.Logger.Warn("SetFillColor %s, err", req.FontColor)
 			}
 		}
-		if len(req.StrokeColor) > 0 {
-			if pw.SetColor(req.StrokeColor) {
-				dw.SetStrokeColor(pw)
-				image.ctx.Logger.Debug("SetStrokeColor %s", req.StrokeColor)
-			} else {
-				image.ctx.Logger.Warn("SetStrokeColor %s, err", req.StrokeColor)
+		dw.SetFillOpacity(float64(req.WaterMarkOpacity) / 100.0)
+		image.ctx.Logger.Debug("SetFillOpacity %d", req.WaterMarkOpacity)
+		if req.StrokeWidth > 0 {
+			dw.SetStrokeWidth(float64(req.StrokeWidth))
+			image.ctx.Logger.Debug("SetStrokeWidth %d", req.StrokeWidth)
+			if len(req.StrokeColor) > 0 {
+				if pw.SetColor(req.StrokeColor) {
+					dw.SetStrokeColor(pw)
+					image.ctx.Logger.Debug("SetStrokeColor %s", req.StrokeColor)
+				} else {
+					image.ctx.Logger.Warn("SetStrokeColor %s, err", req.StrokeColor)
+				}
 			}
+			dw.SetStrokeOpacity(float64(req.WaterMarkOpacity) / 100.0)
+			image.ctx.Logger.Debug("SetStrokeOpacity %d", req.WaterMarkOpacity)
 		}
-		dw.SetStrokeWidth(float64(req.StrokeWidth))
-		image.ctx.Logger.Debug("SetStrokeWidth %d", req.StrokeWidth)
-
 		if err := mw.AnnotateImage(dw, float64(req.WaterMarkX), float64(req.WaterMarkY), float64(req.WaterMarkRotate), req.Text); err != nil {
-			image.ctx.Logger.Warn("AnnotateImage %d %d %d, err: %s", req.WaterMarkX, req.WaterMarkY, req.WaterMarkRotate, err)
+			image.ctx.Logger.Warn("AnnotateImage %d %d %d %s, err: %s", req.WaterMarkX, req.WaterMarkY, req.WaterMarkRotate, req.Text, err)
 			return err
 		}
-		image.ctx.Logger.Debug("AnnotateImage %s %d %d %d", req.Text, req.WaterMarkX, req.WaterMarkY, req.WaterMarkRotate)
+		image.ctx.Logger.Debug("AnnotateImage %d %d %d %s", req.WaterMarkX, req.WaterMarkY, req.WaterMarkRotate, req.Text)
 	}
-
-	if len(req.Logo) > 0 {
-		logoMW := imagick.NewMagickWand()
-		defer logoMW.Destroy()
-		logoMW.ReadImage(req.Logo)
-		logoMW.DrawImage(dw)
-		if err := mw.CompositeImage(logoMW, imagick.COMPOSITE_OP_OVER, true, req.WaterMarkX, req.WaterMarkY); err != nil {
-			image.ctx.Logger.Warn("CompositeImage %s %d %d, err: %s", req.Logo, req.WaterMarkX, req.WaterMarkY, err)
-			return err
-		}
-		image.ctx.Logger.Debug("CompositeImage %s %d %d", req.Logo, req.WaterMarkX, req.WaterMarkY)
-	}
-
 	return nil
 }
 

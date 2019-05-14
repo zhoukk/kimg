@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"crypto/md5"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -305,7 +306,11 @@ func (ctx *KimgContext) genRequest(r *http.Request, md5Sum string) *KimgRequest 
 	}
 
 	if v, ok := r.Form["t"]; ok {
-		req.Text = v[0]
+		if b, err := base64.RawURLEncoding.DecodeString(v[0]); err == nil {
+			req.Text = string(b)
+		} else {
+			ctx.Logger.Warn(err.Error())
+		}
 	}
 	if len(req.Text) > 0 {
 		if v, ok := r.Form["tf"]; ok {
@@ -326,7 +331,17 @@ func (ctx *KimgContext) genRequest(r *http.Request, md5Sum string) *KimgRequest 
 	}
 
 	if v, ok := r.Form["l"]; ok {
-		req.Logo = v[0]
+		if b, err := base64.RawURLEncoding.DecodeString(v[0]); err == nil {
+			req.Logo = string(b)
+		}
+	}
+	if len(req.Logo) > 0 {
+		if v, ok := r.Form["lw"]; ok {
+			req.LogoW, _ = strconv.Atoi(v[0])
+		}
+		if v, ok := r.Form["lh"]; ok {
+			req.LogoH, _ = strconv.Atoi(v[0])
+		}
 	}
 
 	if v, ok := r.Form["wmg"]; ok {

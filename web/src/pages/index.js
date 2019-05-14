@@ -15,10 +15,12 @@ const Panel = Collapse.Panel;
 const defaultQuery = {
   s: false, sm: 'fit', sw: 200, sh: 200, sp: 50, swp: 50, shp: 50,
   c: false, cg: 'c', cw: 200, ch: 200, co: 'lt', cx: 10, cy: 10,
-  wm: false, t: 'kimg', l: '', tf: '', tfs: 16, tfc: '', tsc: '', tsw: 0, wmg: 'se', wmx: 10, wmy: 10, wmr: 0, wmo: 80,
+  wm: false, t: 'kimg', tf: '', tfs: 16, tfc: '', tsc: '', tsw: 0,
+  l: '', lw: 0, lh: 0, wmg: 'se', wmx: 10, wmy: 10, wmr: 0, wmo: 80,
   r: 0, bc: '', g: false, q: 75, ao: true, st: true, f: 'jpg',
 }
 
+const base64Url = s => Buffer.from(s, 'utf8').toString('base64').replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 
 class IntegerStep extends React.Component {
   state = {
@@ -322,7 +324,7 @@ const ImageWaterMarkQueryForm = Form.create({
     const q = {}
     if (values.wm) {
       if (values.t.length > 0) {
-        q.t = values.t
+        q.t = base64Url(values.t)
         if (values.tf.length > 0) {
           q.tf = values.tf
         }
@@ -341,7 +343,13 @@ const ImageWaterMarkQueryForm = Form.create({
       }
 
       if (values.l.length > 0) {
-        q.l = values.l
+        q.l = base64Url(values.l)
+        if (values.lw > 0) {
+          q.lw = values.lw
+        }
+        if (values.lh > 0) {
+          q.lh = values.lh
+        }
       }
 
       if (values.wmg) {
@@ -417,6 +425,16 @@ const ImageWaterMarkQueryForm = Form.create({
       <FormItem label={formatMessage({ id: 'WATERMARK_LOGO' })} wrapperCol={{ span: 12, offset: 2 }}>
         {getFieldDecorator('l', { initialValue: defaultQuery.l })(
           <Input disabled={!enableWaterMark} />
+        )}
+      </FormItem>
+      <FormItem label={formatMessage({ id: 'WATERMARK_LOGO_W' })}>
+        {getFieldDecorator('lw', { initialValue: defaultQuery.lw })(
+          <InputNumber min={0} disabled={!enableWaterMark} />
+        )}
+      </FormItem>
+      <FormItem label={formatMessage({ id: 'WATERMARK_LOGO_H' })}>
+        {getFieldDecorator('lh', { initialValue: defaultQuery.lh })(
+          <InputNumber min={0} disabled={!enableWaterMark} />
         )}
       </FormItem>
       <FormItem label={formatMessage({ id: 'WATERMARK_GRAVITY' })}>

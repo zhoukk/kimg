@@ -64,6 +64,8 @@ export default {
   WATERMARK_ENABLE: 'WaterMark Enable',
   WATERMARK_TEXT: 'Text',
   WATERMARK_LOGO: 'Logo Url',
+  WATERMARK_LOGO_W: 'Logo Width',
+  WATERMARK_LOGO_H: 'Logo Height',
   WATERMARK_FONT_NAME: 'Font Name',
   WATERMARK_FONT_SIZE: 'Font Size',
   WATERMARK_FONT_COLOR: 'Font Color',
