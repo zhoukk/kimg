@@ -15,7 +15,7 @@ const Panel = Collapse.Panel;
 const defaultQuery = {
   s: false, sm: 'fit', sw: 200, sh: 200, sp: 50, swp: 50, shp: 50,
   c: false, cg: 'c', cw: 200, ch: 200, co: 'lt', cx: 10, cy: 10,
-  wm: false, t: 'kimg', tf: '', tfs: 16, tfc: '', tsc: '', tsw: 0,
+  wm: false, t: 'kimg', tf: '', tfs: 32, tfc: '', tsc: '', tsw: 0,
   l: '', lw: 0, lh: 0, wmg: 'se', wmx: 10, wmy: 10, wmr: 0, wmo: 80,
   r: 0, bc: '', g: false, q: 75, ao: true, st: true, f: 'jpg',
 }
@@ -129,6 +129,7 @@ const ImageBasicQueryForm = Form.create({
           <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={true} />
         )}
       </FormItem>
+      <Divider />
       <FormItem label={formatMessage({ id: 'OUTPUT_FORMAT' })}>
         {getFieldDecorator('f', { initialValue: defaultQuery.f })(
           <RadioGroup buttonStyle="solid">
@@ -392,51 +393,58 @@ const ImageWaterMarkQueryForm = Form.create({
           <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={false} />
         )}
       </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_TEXT' })} wrapperCol={{ span: 8, offset: 2 }}>
-        {getFieldDecorator('t', { initialValue: defaultQuery.t })(
-          <Input disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_FONT_NAME' })} wrapperCol={{ span: 8, offset: 2 }}>
-        {getFieldDecorator('tf', { initialValue: defaultQuery.tf })(
-          <Input disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_FONT_SIZE' })}>
-        {getFieldDecorator('tfs', { initialValue: defaultQuery.tfs })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_FONT_COLOR' })} wrapperCol={{ span: 8, offset: 2 }}>
-        {getFieldDecorator('tfc', { initialValue: defaultQuery.tfc })(
-          <Input prefix='#' addonAfter={<Icon style={{ color: `#${tfc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_STROKE_COLOR' })} wrapperCol={{ span: 8, offset: 2 }}>
-        {getFieldDecorator('tsc', { initialValue: defaultQuery.tsc })(
-          <Input prefix='#' addonAfter={<Icon style={{ color: `#${tsc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_STROKE_WIDTH' })}>
-        {getFieldDecorator('tsw', { initialValue: defaultQuery.tsw })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_LOGO' })} wrapperCol={{ span: 12, offset: 2 }}>
-        {getFieldDecorator('l', { initialValue: defaultQuery.l })(
-          <Input disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_LOGO_W' })}>
-        {getFieldDecorator('lw', { initialValue: defaultQuery.lw })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_LOGO_H' })}>
-        {getFieldDecorator('lh', { initialValue: defaultQuery.lh })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
+      <Tabs defaultActiveKey="text">
+        <TabPane tab={formatMessage({ id: 'WATERMARK_TEXT' })} key="text">
+          <FormItem label={formatMessage({ id: 'WATERMARK_TEXT' })} wrapperCol={{ span: 8, offset: 2 }}>
+            {getFieldDecorator('t', { initialValue: defaultQuery.t })(
+              <Input disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+          <FormItem label={formatMessage({ id: 'WATERMARK_FONT_NAME' })} wrapperCol={{ span: 8, offset: 2 }}>
+            {getFieldDecorator('tf', { initialValue: defaultQuery.tf })(
+              <Input disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+          <FormItem label={formatMessage({ id: 'WATERMARK_FONT_SIZE' })}>
+            {getFieldDecorator('tfs', { initialValue: defaultQuery.tfs })(
+              <InputNumber min={0} disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+          <FormItem label={formatMessage({ id: 'WATERMARK_FONT_COLOR' })} wrapperCol={{ span: 8, offset: 2 }}>
+            {getFieldDecorator('tfc', { initialValue: defaultQuery.tfc })(
+              <Input prefix='#' addonAfter={<Icon style={{ color: `#${tfc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+          <FormItem label={formatMessage({ id: 'WATERMARK_STROKE_COLOR' })} wrapperCol={{ span: 8, offset: 2 }}>
+            {getFieldDecorator('tsc', { initialValue: defaultQuery.tsc })(
+              <Input prefix='#' addonAfter={<Icon style={{ color: `#${tsc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+          <FormItem label={formatMessage({ id: 'WATERMARK_STROKE_WIDTH' })}>
+            {getFieldDecorator('tsw', { initialValue: defaultQuery.tsw })(
+              <InputNumber min={0} disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+        </TabPane>
+        <TabPane tab={formatMessage({ id: 'WATERMARK_LOGO' })} key="logo">
+          <FormItem label={formatMessage({ id: 'WATERMARK_LOGO' })} wrapperCol={{ span: 12, offset: 2 }}>
+            {getFieldDecorator('l', { initialValue: defaultQuery.l })(
+              <Input disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+          <FormItem label={formatMessage({ id: 'WATERMARK_LOGO_W' })}>
+            {getFieldDecorator('lw', { initialValue: defaultQuery.lw })(
+              <InputNumber min={0} disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+          <FormItem label={formatMessage({ id: 'WATERMARK_LOGO_H' })}>
+            {getFieldDecorator('lh', { initialValue: defaultQuery.lh })(
+              <InputNumber min={0} disabled={!enableWaterMark} />
+            )}
+          </FormItem>
+        </TabPane>
+      </Tabs>
+      <Divider />
       <FormItem label={formatMessage({ id: 'WATERMARK_GRAVITY' })}>
         {getFieldDecorator('wmg', { initialValue: defaultQuery.wmg })(
           <RadioGroup buttonStyle="solid" disabled={!enableWaterMark}>

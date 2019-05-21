@@ -24,6 +24,10 @@
   font-size: 1.2rem;
 }
 
+.lang {
+  padding-left: 30px;
+}
+
 .footer {
   text-align: center;
 }

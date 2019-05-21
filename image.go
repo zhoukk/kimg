@@ -397,7 +397,7 @@ func (image *KimgImagick) waterMark(mw *imagick.MagickWand, req *KimgRequest) er
 			image.ctx.Logger.Debug("SetGravity %s", req.WaterMarkGravity)
 		}
 		if req.WaterMarkOpacity > 0 {
-			logoMW.ShadowImage(float64(req.WaterMarkOpacity), 0, 0, 0)
+			// logoMW.SetImageAlpha(float64(req.WaterMarkOpacity) / 100.0)
 		}
 		if req.WaterMarkRotate > 0 {
 			dw.Rotate(float64(req.WaterMarkRotate))
