@@ -12,15 +12,15 @@ English | [简体中文](./README.zh-CN.md)
 
 - run with linux binary
 ```console
-$ wget -O- https://github.com/zhoukk/kimg/releases/download/v0.4.3/kimg_v0.4.3_linux.tar.gz | tar xf -
-$ cd kimg_v0.4.3_linux
+$ wget -O- https://github.com/zhoukk/kimg/releases/download/v0.5.0/kimg_v0.5.0_linux.tar.gz | tar xf -
+$ cd kimg_v0.5.0_linux
 $ ./kimg
 ```
 
 - run with docker
 ```console
-$ docker pull zhoukk/kimg:v0.4.3
-$ docker run --rm -p 80:80 zhoukk/kimg:v0.4.3
+$ docker pull zhoukk/kimg:v0.5.0
+$ docker run --rm -p 80:80 zhoukk/kimg:v0.5.0
 ```
 
 > open a browser and have fun

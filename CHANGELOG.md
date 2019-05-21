@@ -1,3 +1,12 @@
+# [0.5.0](https://github.com/zhoukk/kimg/compare/v0.4.3...v0.5.0) (2019-05-21)
+
+
+### Features
+
+* **lang:** add en-US, zh-CN language ([cccfe31](https://github.com/zhoukk/kimg/commit/cccfe31))
+
+
+
 ## [0.4.3](https://github.com/zhoukk/kimg/compare/v0.4.2...v0.4.3) (2019-05-14)
 
 

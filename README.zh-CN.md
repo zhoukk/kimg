@@ -12,15 +12,15 @@
 
 - 从linux二进制运行文件启动
 ```console
-$ wget -O- https://github.com/zhoukk/kimg/releases/download/v0.4.3/kimg_v0.4.3_linux.tar.gz | tar xf -
-$ cd kimg_v0.4.3_linux
+$ wget -O- https://github.com/zhoukk/kimg/releases/download/v0.5.0/kimg_v0.5.0_linux.tar.gz | tar xf -
+$ cd kimg_v0.5.0_linux
 $ ./kimg
 ```
 
 - 从docker镜像启动
 ```console
-$ docker pull zhoukk/kimg:v0.4.3
-$ docker run --rm -p 80:80 zhoukk/kimg:v0.4.3
+$ docker pull zhoukk/kimg:v0.5.0
+$ docker run --rm -p 80:80 zhoukk/kimg:v0.5.0
 ```
 
 > 打开浏览器体验
