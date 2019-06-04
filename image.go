@@ -82,7 +82,7 @@ func (image *KimgImagick) Info(req *KimgRequest, data []byte) (*KimgResponse, er
 		exif[name] = mw.GetImageProperty(name)
 	}
 
-	u, _ := url.Parse(image.ctx.Config.Httpd.Host)
+	u, _ := url.Parse(image.ctx.Config.Httpd.URL)
 	u.Path = fmt.Sprintf("image/%s", req.Md5)
 	return &KimgResponse{
 		Md5:         req.Md5,
