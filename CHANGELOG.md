@@ -1,3 +1,22 @@
+# [0.6.0](https://github.com/zhoukk/kimg/compare/v0.5.0...v0.6.0) (2019-06-04)
+
+
+### Bug Fixes
+
+* **src:** fix image page after crop ([664a3ba](https://github.com/zhoukk/kimg/commit/664a3ba))
+
+
+### Code Refactoring
+
+* **config:** change  KIMG_HTTPD_HOST to KIMG_HTTPD_URL ([3546341](https://github.com/zhoukk/kimg/commit/3546341))
+
+
+### BREAKING CHANGES
+
+* **config:** KIMG_HTTPD_HOST changed to KIMG_HTTPD_URL
+
+
+
 # [0.5.0](https://github.com/zhoukk/kimg/compare/v0.4.3...v0.5.0) (2019-05-21)
 
 
