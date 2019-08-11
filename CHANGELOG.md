@@ -1,3 +1,12 @@
+# [](https://github.com/zhoukk/kimg/compare/v0.6.0...v) (2019-08-11)
+
+
+### Features
+
+* **watermark:** move watermark param to config ([bbee209](https://github.com/zhoukk/kimg/commit/bbee209))
+
+
+
 # [0.6.0](https://github.com/zhoukk/kimg/compare/v0.5.0...v0.6.0) (2019-06-04)
 
 
