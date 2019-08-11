@@ -55,6 +55,30 @@ type KimgConfig struct {
 		SaveNew bool   `yaml:"saveNew,omitempty"`
 		Root    string `yaml:"root,omitempty"`
 	} `yaml:"storage,omitempty"`
+
+	Watermark struct {
+		Enable  bool   `yaml:"enable,omitempty"`
+		Gravity string `yaml:"gravity,omitempty"`
+		X       int    `yaml:"x,omitempty"`
+		Y       int    `yaml:"y,omitempty"`
+		Rotate  int    `yaml:"rotate,omitempty"`
+		Opacity int    `yaml:"opacity,omitempty"`
+
+		Text struct {
+			Content     string `yaml:"content,omitempty"`
+			FontName    string `yaml:"fontName,omitempty"`
+			FontSize    int    `yaml:"fontSize,omitempty"`
+			FontColor   string `yaml:"fontColor,omitempty"`
+			StrokeColor string `yaml:"strokeColor,omitempty"`
+			StrokeWidth int    `yaml:"strokeWidth,omitempty"`
+		} `yaml:"text,omitempty"`
+
+		Logo struct {
+			File string `yaml:"file,omitempty"`
+			W    int    `yaml:"w,omitempty"`
+			H    int    `yaml:"h,omitempty"`
+		} `yaml:"logo,omitempty"`
+	} `yaml:"watermark,omitempty"`
 }
 
 // NewKimgConfig create a config instance from config file.
@@ -181,6 +205,53 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 	}
 	if env, ok := os.LookupEnv("KIMG_STORAGE_ROOT"); ok {
 		cfg.Storage.Root = env
+	}
+
+	// watermark env
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_ENABLE"); ok {
+		cfg.Watermark.Enable, _ = strconv.ParseBool(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_GRAVITY"); ok {
+		cfg.Watermark.Gravity = env
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_X"); ok {
+		cfg.Watermark.X, _ = strconv.Atoi(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_Y"); ok {
+		cfg.Watermark.Y, _ = strconv.Atoi(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_ROTATE"); ok {
+		cfg.Watermark.Rotate, _ = strconv.Atoi(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_OPACITY"); ok {
+		cfg.Watermark.Opacity, _ = strconv.Atoi(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_TEXT_CONTENT"); ok {
+		cfg.Watermark.Text.Content = env
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_TEXT_FONT_NAME"); ok {
+		cfg.Watermark.Text.FontName = env
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_TEXT_FONT_SIZE"); ok {
+		cfg.Watermark.Text.FontSize, _ = strconv.Atoi(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_TEXT_FONT_COLOR"); ok {
+		cfg.Watermark.Text.FontColor = env
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_TEXT_STROKE_COLOR"); ok {
+		cfg.Watermark.Text.StrokeColor = env
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_TEXT_STROKE_WIDTH"); ok {
+		cfg.Watermark.Text.StrokeWidth, _ = strconv.Atoi(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_LOGO_FILE"); ok {
+		cfg.Watermark.Logo.File = env
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_LOGO_W"); ok {
+		cfg.Watermark.Logo.W, _ = strconv.Atoi(env)
+	}
+	if env, ok := os.LookupEnv("KIMG_WATERMARK_LOGO_H"); ok {
+		cfg.Watermark.Logo.H, _ = strconv.Atoi(env)
 	}
 
 	return &cfg, nil

@@ -46,7 +46,7 @@ httpd:
   # ENV KIMG_HTTPD_MAX_SIZE
   maxSize: 104857600 #100*1024*1024
 
-  # Weather serve www web root.
+  # Whether serve www web root.
   #
   # ENV KIMG_HTTPD_ENABLE_WEB
   enableWeb: true
@@ -151,7 +151,7 @@ storage:
   # ENV KIMG_STORAGE_MODE
   mode: file
 
-  # The option indicate wheater save all request images.
+  # The option indicate whether save all request images.
   #
   # ENV KIMG_STORAGE_SAVE_NEW
   saveNew: true
@@ -160,3 +160,90 @@ storage:
   #
   # ENV KIMG_STORAGE_ROOT
   root: kimgs
+
+#
+# Kimg WaterMark Configuration.
+#
+watermark:
+  
+  # Whether or not to process watermark.
+  #
+  # ENV KIMG_WATERMARK_ENABLE
+  enable: true
+
+  # Gravity of watermark.
+  #
+  # ENV KIMG_WATERMARK_GRAVITY
+  gravity: se
+
+  # X of watermark.
+  #
+  # ENV KIMG_WATERMARK_X
+  x: 0
+
+  # Y of watermark.
+  #
+  # ENV KIMG_WATERMARK_Y
+  y: 0
+
+  # Rotate of watermark.
+  #
+  # ENV KIMG_WATERMARK_ROTATE
+  rotate: 0
+
+  # Opacity of watermark.
+  #
+  # ENV KIMG_WATERMARK_OPACITY
+  opacity: 100
+
+  # Text WaterMark Configuration.
+  text:
+
+    # Text of watermark.
+    #
+    # ENV KIMG_WATERMARK_TEXT_CONTENT
+    content: kimg
+
+    # Text Font Name of watermark.
+    #
+    # ENV KIMG_WATERMARK_TEXT_FONT_NAME
+    fontName:
+
+    # Text Font Size of watermark.
+    #
+    # ENV KIMG_WATERMARK_TEXT_FONT_SIZE
+    fontSize: 32
+
+    # Text Font Color of watermark.
+    #
+    # ENV KIMG_WATERMARK_TEXT_FONT_COLOR
+    fontColor: #ec6952
+
+    # Text Stroke Color of watermark.
+    #
+    # ENV KIMG_WATERMARK_TEXT_STROKE_COLOR
+    strokeColor: #ff0000
+
+    # Text Stroke Width of watermark.
+    #
+    # ENV KIMG_WATERMARK_TEXT_STROKE_WIDTH
+    strokeWidth: 2
+
+  # Logo WaterMark Configuration.
+  logo:
+
+    # Logo file of watermark.
+    #
+    # ENV KIMG_WATERMARK_LOGO_FILE
+    file:
+
+    # Logo Width of watermark.
+    #
+    # ENV KIMG_WATERMARK_LOGO_W
+    w: 60
+
+    # Logo Height of watermark.
+    #
+    # ENV KIMG_WATERMARK_LOGO_H
+    h: 60
+ 

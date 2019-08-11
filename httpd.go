@@ -3,14 +3,12 @@ package main
 import (
 	"bytes"
 	"crypto/md5"
-	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -303,61 +301,6 @@ func (ctx *KimgContext) genRequest(r *http.Request, md5Sum string) *KimgRequest 
 		if v, ok := r.Form["cy"]; ok {
 			req.OffsetY, _ = strconv.Atoi(v[0])
 		}
-	}
-
-	if v, ok := r.Form["t"]; ok {
-		if b, err := base64.RawURLEncoding.DecodeString(v[0]); err == nil {
-			req.Text = string(b)
-		} else {
-			ctx.Logger.Warn(err.Error())
-		}
-	}
-	if len(req.Text) > 0 {
-		if v, ok := r.Form["tf"]; ok {
-			req.FontName = filepath.Join(ctx.Config.Image.FontRoot, v[0])
-		}
-		if v, ok := r.Form["tfs"]; ok {
-			req.FontSize, _ = strconv.Atoi(v[0])
-		}
-		if v, ok := r.Form["tfc"]; ok && len(v[0]) == 6 {
-			req.FontColor = "#" + v[0]
-		}
-		if v, ok := r.Form["tsc"]; ok && len(v[0]) == 6 {
-			req.StrokeColor = "#" + v[0]
-		}
-		if v, ok := r.Form["tsw"]; ok {
-			req.StrokeWidth, _ = strconv.Atoi(v[0])
-		}
-	}
-
-	if v, ok := r.Form["l"]; ok {
-		if b, err := base64.RawURLEncoding.DecodeString(v[0]); err == nil {
-			req.Logo = string(b)
-		}
-	}
-	if len(req.Logo) > 0 {
-		if v, ok := r.Form["lw"]; ok {
-			req.LogoW, _ = strconv.Atoi(v[0])
-		}
-		if v, ok := r.Form["lh"]; ok {
-			req.LogoH, _ = strconv.Atoi(v[0])
-		}
-	}
-
-	if v, ok := r.Form["wmg"]; ok {
-		req.WaterMarkGravity = v[0]
-	}
-	if v, ok := r.Form["wmx"]; ok {
-		req.WaterMarkX, _ = strconv.Atoi(v[0])
-	}
-	if v, ok := r.Form["wmy"]; ok {
-		req.WaterMarkY, _ = strconv.Atoi(v[0])
-	}
-	if v, ok := r.Form["wmr"]; ok {
-		req.WaterMarkRotate, _ = strconv.Atoi(v[0])
-	}
-	if v, ok := r.Form["wmo"]; ok {
-		req.WaterMarkOpacity, _ = strconv.Atoi(v[0])
 	}
 
 	if v, ok := r.Form["f"]; ok {

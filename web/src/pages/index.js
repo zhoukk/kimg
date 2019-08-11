@@ -15,8 +15,6 @@ const Panel = Collapse.Panel;
 const defaultQuery = {
   s: false, sm: 'fit', sw: 200, sh: 200, sp: 50, swp: 50, shp: 50,
   c: false, cg: 'c', cw: 200, ch: 200, co: 'lt', cx: 10, cy: 10,
-  wm: false, t: 'kimg', tf: '', tfs: 32, tfc: '', tsc: '', tsw: 0,
-  l: '', lw: 0, lh: 0, wmg: 'se', wmx: 10, wmy: 10, wmr: 0, wmo: 80,
   r: 0, bc: '', g: false, q: 75, ao: true, st: true, f: 'jpg',
 }
 
@@ -319,177 +317,6 @@ const ImageCropQueryForm = Form.create({
   );
 });
 
-
-const ImageWaterMarkQueryForm = Form.create({
-  onValuesChange(props, _, values) {
-    const q = {}
-    if (values.wm) {
-      if (values.t.length > 0) {
-        q.t = base64Url(values.t)
-        if (values.tf.length > 0) {
-          q.tf = values.tf
-        }
-        if (values.tfs > 0) {
-          q.tfs = values.tfs
-        }
-        if (values.tfc.length === 6) {
-          q.tfc = values.tfc
-        }
-        if (values.tsc.length === 6) {
-          q.tsc = values.tsc
-        }
-        if (values.tsw > 0) {
-          q.tsw = values.tsw
-        }
-      }
-
-      if (values.l.length > 0) {
-        q.l = base64Url(values.l)
-        if (values.lw > 0) {
-          q.lw = values.lw
-        }
-        if (values.lh > 0) {
-          q.lh = values.lh
-        }
-      }
-
-      if (values.wmg) {
-        q.wmg = values.wmg
-      }
-      if (values.wmx > 0) {
-        q.wmx = values.wmx
-      }
-      if (values.wmy > 0) {
-        q.wmy = values.wmy
-      }
-      if (values.wmr > 0) {
-        q.wmr = values.wmr
-      }
-      if (values.wmo > 0) {
-        q.wmo = values.wmo
-      }
-    }
-    props.onChange('watermark', q)
-  },
-})(props => {
-  const { form } = props
-  const { getFieldDecorator, getFieldValue } = form
-
-  const enableWaterMark = getFieldValue('wm')
-
-  let tfc = getFieldValue('tfc')
-  if (!tfc || tfc.length < 6) {
-    tfc = '000000'
-  }
-  let tsc = getFieldValue('tsc')
-  if (!tsc || tsc.length < 6) {
-    tsc = '000000'
-  }
-
-  return (
-    <Form labelCol={{ xs: { span: 24 }, sm: { span: 6 } }} wrapperCol={{ xs: { span: 24 }, sm: { span: 16, offset: 2 } }}>
-      <FormItem label={formatMessage({ id: 'WATERMARK_ENABLE' })}>
-        {getFieldDecorator('wm', { initialValue: defaultQuery.wm })(
-          <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} defaultChecked={false} />
-        )}
-      </FormItem>
-      <Tabs defaultActiveKey="text">
-        <TabPane tab={formatMessage({ id: 'WATERMARK_TEXT' })} key="text">
-          <FormItem label={formatMessage({ id: 'WATERMARK_TEXT' })} wrapperCol={{ span: 8, offset: 2 }}>
-            {getFieldDecorator('t', { initialValue: defaultQuery.t })(
-              <Input disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-          <FormItem label={formatMessage({ id: 'WATERMARK_FONT_NAME' })} wrapperCol={{ span: 8, offset: 2 }}>
-            {getFieldDecorator('tf', { initialValue: defaultQuery.tf })(
-              <Input disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-          <FormItem label={formatMessage({ id: 'WATERMARK_FONT_SIZE' })}>
-            {getFieldDecorator('tfs', { initialValue: defaultQuery.tfs })(
-              <InputNumber min={0} disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-          <FormItem label={formatMessage({ id: 'WATERMARK_FONT_COLOR' })} wrapperCol={{ span: 8, offset: 2 }}>
-            {getFieldDecorator('tfc', { initialValue: defaultQuery.tfc })(
-              <Input prefix='#' addonAfter={<Icon style={{ color: `#${tfc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-          <FormItem label={formatMessage({ id: 'WATERMARK_STROKE_COLOR' })} wrapperCol={{ span: 8, offset: 2 }}>
-            {getFieldDecorator('tsc', { initialValue: defaultQuery.tsc })(
-              <Input prefix='#' addonAfter={<Icon style={{ color: `#${tsc}` }} type="bg-colors" />} disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-          <FormItem label={formatMessage({ id: 'WATERMARK_STROKE_WIDTH' })}>
-            {getFieldDecorator('tsw', { initialValue: defaultQuery.tsw })(
-              <InputNumber min={0} disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-        </TabPane>
-        <TabPane tab={formatMessage({ id: 'WATERMARK_LOGO' })} key="logo">
-          <FormItem label={formatMessage({ id: 'WATERMARK_LOGO' })} wrapperCol={{ span: 12, offset: 2 }}>
-            {getFieldDecorator('l', { initialValue: defaultQuery.l })(
-              <Input disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-          <FormItem label={formatMessage({ id: 'WATERMARK_LOGO_W' })}>
-            {getFieldDecorator('lw', { initialValue: defaultQuery.lw })(
-              <InputNumber min={0} disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-          <FormItem label={formatMessage({ id: 'WATERMARK_LOGO_H' })}>
-            {getFieldDecorator('lh', { initialValue: defaultQuery.lh })(
-              <InputNumber min={0} disabled={!enableWaterMark} />
-            )}
-          </FormItem>
-        </TabPane>
-      </Tabs>
-      <Divider />
-      <FormItem label={formatMessage({ id: 'WATERMARK_GRAVITY' })}>
-        {getFieldDecorator('wmg', { initialValue: defaultQuery.wmg })(
-          <RadioGroup buttonStyle="solid" disabled={!enableWaterMark}>
-            <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='nw'><FormattedMessage id='GRAVITY_NW' /></RadioButton>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='n'><FormattedMessage id='GRAVITY_N' /></RadioButton>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='ne'><FormattedMessage id='GRAVITY_NE' /></RadioButton>
-            </div>
-            <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='w'><FormattedMessage id='GRAVITY_W' /></RadioButton>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='c'><FormattedMessage id='GRAVITY_C' /></RadioButton>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='e'><FormattedMessage id='GRAVITY_E' /></RadioButton>
-            </div>
-            <div style={{ lineHeight: 0 }}>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='sw'><FormattedMessage id='GRAVITY_SW' /></RadioButton>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='s'><FormattedMessage id='GRAVITY_S' /></RadioButton>
-              <RadioButton style={{ width: 60, borderRadius: 0 }} value='se'><FormattedMessage id='GRAVITY_SE' /></RadioButton>
-            </div>
-          </RadioGroup>
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_X' })}>
-        {getFieldDecorator('wmx', { initialValue: defaultQuery.wmx })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_Y' })}>
-        {getFieldDecorator('wmy', { initialValue: defaultQuery.wmy })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_ROTATE' })}>
-        {getFieldDecorator('wmr', { initialValue: defaultQuery.wmr })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-      <FormItem label={formatMessage({ id: 'WATERMARK_OPACITY' })}>
-        {getFieldDecorator('wmo', { initialValue: defaultQuery.wmo })(
-          <InputNumber min={0} disabled={!enableWaterMark} />
-        )}
-      </FormItem>
-    </Form>
-  );
-});
-
 export default class extends PureComponent {
 
   state = {
@@ -672,9 +499,6 @@ export default class extends PureComponent {
                   </TabPane>
                   <TabPane tab={formatMessage({ id: 'TAB_CROP' })} key="crop">
                     <ImageCropQueryForm onChange={this.onImageQueryChange} />
-                  </TabPane>
-                  <TabPane tab={formatMessage({ id: 'TAB_WATERMARK' })} key="watermark">
-                    <ImageWaterMarkQueryForm onChange={this.onImageQueryChange} />
                   </TabPane>
                 </Tabs>
               </Panel>

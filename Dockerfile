@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libfontconfig1-dev libfreetype6-dev libgomp1 libexpat1-dev && \
     rm -rf /var/lib/apt/lists/*
 
-ENV IMAGEMAGICK_VERSION=7.0.8-40
+ENV IMAGEMAGICK_VERSION=7.0.8-59
 
 RUN wget -q https://github.com/ImageMagick/ImageMagick/archive/${IMAGEMAGICK_VERSION}.tar.gz \
     && tar xf ${IMAGEMAGICK_VERSION}.tar.gz \
