@@ -22,7 +22,7 @@ cache:
   - "$HOME/opt"
 env:
   global:
-  - IMAGEMAGICK_VERSION=7.0.8-40
+  - IMAGEMAGICK_VERSION=7.0.8-59
 before_install:
 - nvm install stable
 - nvm use stable
@@ -44,7 +44,7 @@ script:
 before_deploy:
 - export CGO_CFLAGS_ALLOW="-fopenmp"
 - export CGO_CFLAGS="`pkg-config --cflags MagickWand MagickCore`"
-- export CGO_LDFLAGS="`pkg-config --libs MagickWand MagickCore` -ljpeg -lpng -lwebpmux -lwebp -lfontconfig -lfreetype -lgomp -lexpat -lz -lm -ldl"
+- export CGO_LDFLAGS="`pkg-config --libs MagickWand MagickCore` -ljpeg -lpng -lwebpmux -lwebp -lfontconfig -lfreetype -lgomp -lexpat -luuid -lz -lm -ldl"
 - go get -d && go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick
 - export TRAVIS_TAG="`git describe "--abbrev=0" "--tags"`"
 - go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${TRAVIS_TAG}'" -o kimg
