@@ -18,8 +18,6 @@ const defaultQuery = {
   r: 0, bc: '', g: false, q: 75, ao: true, st: true, f: 'jpg',
 }
 
-const base64Url = s => Buffer.from(s, 'utf8').toString('base64').replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
-
 class IntegerStep extends React.Component {
   state = {
     inputValue: this.props.value,
