@@ -1,4 +1,4 @@
-package main
+package kimg
 
 import (
 	"container/list"

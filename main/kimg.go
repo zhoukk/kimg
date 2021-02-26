@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"runtime"
+
+	"github.com/zhoukk/kimg"
 )
 
 var (
@@ -22,7 +24,7 @@ func init() {
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	ctx, err := NewKimgContext(configFile)
+	ctx, err := kimg.NewKimgContext(configFile)
 	if err != nil {
 		log.Println(err)
 		flag.Usage()
