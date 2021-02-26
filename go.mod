@@ -1,4 +1,4 @@
-module kimg
+module github.com/zhoukk/kimg
 
 go 1.14
 
