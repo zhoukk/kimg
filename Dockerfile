@@ -24,7 +24,7 @@ RUN export CGO_CFLAGS_ALLOW="-fopenmp" && \
     -ljpeg -lpng -lwebpmux -lwebp -lfontconfig -lfreetype -lgomp -lexpat -luuid -lz -lm -ldl" && \
     go get -d && go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick && \
     export KIMG_TAG="`git describe "--abbrev=0" "--tags"`" && \
-    go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG}'" -o kimg
+    go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG}'" -o kimg main/kimg.go
 
 FROM node AS nodebuilder
 
