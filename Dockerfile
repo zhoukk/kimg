@@ -22,9 +22,9 @@ RUN export CGO_CFLAGS_ALLOW="-fopenmp" && \
     export CGO_CFLAGS="`pkg-config --cflags MagickWand MagickCore`" && \
     export CGO_LDFLAGS="`pkg-config --libs MagickWand MagickCore` \
     -ljpeg -lpng -lwebpmux -lwebp -lfontconfig -lfreetype -lgomp -lexpat -luuid -lz -lm -ldl" && \
+    go build -tags no_pkgconfig gopkg.in/gographics/imagick.v3/imagick && \
     go env -w GO111MODULE=on && \
     go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct && \
-    go build -tags no_pkgconfig gopkg.in/gographics/imagick.v3/imagick && \
     export KIMG_TAG="`git describe "--abbrev=0" "--tags"`" && \
     go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG}'" -o kimg main/kimg.go
 
