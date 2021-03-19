@@ -24,7 +24,7 @@ RUN export CGO_CFLAGS_ALLOW="-fopenmp" && \
     -ljpeg -lpng -lwebpmux -lwebp -lfontconfig -lfreetype -lgomp -lexpat -luuid -lz -lm -ldl" && \
     go env -w GO111MODULE=on && \
     go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct && \
-    go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick && \
+    go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick@latest && \
     export KIMG_TAG="`git describe "--abbrev=0" "--tags"`" && \
     go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${KIMG_TAG}'" -o kimg main/kimg.go
 
