@@ -43,8 +43,11 @@ func NewKimgStorage(ctx *KimgContext) (KimgStorage, error) {
 	case "file":
 		log.Println("[INFO] storage [file] used")
 		return NewKimgFileStorage(ctx)
+	case "minio":
+		log.Println("[INFO] storage [minio] used")
+		return NewKimgMinioStorage(ctx)
 	default:
 		log.Printf("[WARN] unsupported storage mode :%s\n", ctx.Config.Storage.Mode)
-		return nil, errors.New("No Available Storage")
+		return nil, errors.New("not available storage")
 	}
 }

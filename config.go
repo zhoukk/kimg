@@ -52,7 +52,16 @@ type KimgConfig struct {
 	Storage struct {
 		Mode    string `yaml:"mode,omitempty"`
 		SaveNew bool   `yaml:"saveNew,omitempty"`
-		Root    string `yaml:"root,omitempty"`
+		File    struct {
+			Root string `yaml:"root,omitempty"`
+		} `yaml:"file,omitempty"`
+		Minio struct {
+			Endpoint        string `yaml:"endpoint,omitempty"`
+			AccessKeyID     string `yaml:"accessKeyId,omitempty"`
+			SecretAccessKey string `yaml:"secretAccessKey,omitempty"`
+			Bucket          string `yaml:"bucket,omitempty"`
+			UseSSL          bool   `yaml:"useSSL,omitempty"`
+		} `yaml:"minio,omitempty"`
 	} `yaml:"storage,omitempty"`
 
 	Watermark struct {
@@ -109,7 +118,7 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 
 	cfg.Storage.Mode = "file"
 	cfg.Storage.SaveNew = true
-	cfg.Storage.Root = "kimgs"
+	cfg.Storage.File.Root = "kimgs"
 
 	data, err := ioutil.ReadFile(configFile)
 	if err != nil {
@@ -201,8 +210,23 @@ func NewKimgConfig(configFile string) (*KimgConfig, error) {
 	if env, ok := os.LookupEnv("KIMG_STORAGE_SAVE_NEW"); ok {
 		cfg.Storage.SaveNew, _ = strconv.ParseBool(env)
 	}
-	if env, ok := os.LookupEnv("KIMG_STORAGE_ROOT"); ok {
-		cfg.Storage.Root = env
+	if env, ok := os.LookupEnv("KIMG_STORAGE_FILE_ROOT"); ok {
+		cfg.Storage.File.Root = env
+	}
+	if env, ok := os.LookupEnv("KIMG_STORAGE_MINIO_ENDPOINT"); ok {
+		cfg.Storage.Minio.Endpoint = env
+	}
+	if env, ok := os.LookupEnv("KIMG_STORAGE_MINIO_ACCESSKEYID"); ok {
+		cfg.Storage.Minio.AccessKeyID = env
+	}
+	if env, ok := os.LookupEnv("KIMG_STORAGE_MINIO_SECRETACCESSKEY"); ok {
+		cfg.Storage.Minio.SecretAccessKey = env
+	}
+	if env, ok := os.LookupEnv("KIMG_STORAGE_MINIO_BUCKET"); ok {
+		cfg.Storage.Minio.Bucket = env
+	}
+	if env, ok := os.LookupEnv("KIMG_STORAGE_MINIO_USESSL"); ok {
+		cfg.Storage.Minio.UseSSL, _ = strconv.ParseBool(env)
 	}
 
 	// watermark env

@@ -9,7 +9,6 @@ export default {
   theme: {
     '@primary-color': 'darkslateblue'
   },
-  outputPath: '../www',
   proxy: {
     '/image': {
       target: "http://localhost/",

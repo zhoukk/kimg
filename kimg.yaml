@@ -2,42 +2,40 @@
 # Kimg Configuration File
 #
 
-
 #
 # Kimg Web Server Configuration.
 #
 httpd:
-
   # Kimg web server bind address for listen.
-  # 
+  #
   # ENV KIMG_HTTPD_BIND
   bind: 0.0.0.0:80
 
   # Kimg web server url.
-  # 
+  #
   # ENV KIMG_HTTPD_URL
-  url: 
+  url:
 
   # Http headers set on image fetch response.
-  # 
+  #
   # ENV KIMG_HTTPD_HEADERS
   headers:
     Server: kimg
 
   # Http header etag option.
   # When set true, get files not modified will return 304
-  # 
+  #
   # ENV KIMG_HTTPD_ETAG
   etag: true
 
   # Http header max-age option.
   # Cache time of browser, default value is 7776000s (90days)
-  # 
+  #
   # ENV KIMG_HTTPD_MAX_AGE
   maxAge: 7776000
 
   # Http item name in upload form.
-  # 
+  #
   # ENV KIMG_HTTPD_FORM_NAME
   formName: file
 
@@ -51,20 +49,17 @@ httpd:
   # ENV KIMG_HTTPD_ENABLE_WEB
   enableWeb: true
 
-
-
 #
 # Kimg Logger Configuration.
 #
 logger:
-
   # The mode of logger. maybe "console" or "file".
   #
   # ENV KIMG_LOGGER_MODE
   mode: console
 
   # The log level filter option. maybe "debug", "info", "warn" or "error".
-  # 
+  #
   # ENV KIMG_LOGGER_LEVEL
   level: debug
 
@@ -73,13 +68,10 @@ logger:
   # ENV KIMG_LOGGER_FILE
   file: kimg.log
 
-
-
 #
 # Kimg Image Process Configuration.
 #
 image:
-
   # The default image format saved, "none" for original or other supported format.
   #
   # ENV KIMG_IMAGE_FORMAT
@@ -100,12 +92,10 @@ image:
     - gif
     - webp
 
-
 #
 # Kimg Cache Server Configuration.
 #
 cache:
-
   # The mode of cache. maybe "none", "memory", "memcache" or "redis".
   #
   # ENV KIMG_CACHE_MODE
@@ -115,7 +105,6 @@ cache:
   #
   # ENV KIMG_CACHE_MAX_SIZE
   maxSize: 1048576 #1024*1024
-
 
   memcache:
     # The url of memcached server.
@@ -135,13 +124,11 @@ cache:
     # ENV KIMG_CACHE_MEMORY_CAPACITY
     capacity: 104857600 #100*1024*1024
 
-
 #
 # Kimg Image Storage Configuration.
 #
 storage:
-
-  # The mode of storage. maybe "file".
+  # The mode of storage. maybe "file", "minio".
   #
   # ENV KIMG_STORAGE_MODE
   mode: file
@@ -151,16 +138,42 @@ storage:
   # ENV KIMG_STORAGE_SAVE_NEW
   saveNew: true
 
-  # The directory path for storage images on mode "file".
-  #
-  # ENV KIMG_STORAGE_ROOT
-  root: kimgs
+  file:
+    # The directory path for storage images on mode "file".
+    #
+    # ENV KIMG_STORAGE_FILE_ROOT
+    root: kimgs
+
+  minio:
+    # The endpoint of minio.
+    #
+    # ENV KIMG_STORAGE_MINIO_ENDPOINT
+    endpoint: 127.0.0.1:9000
+
+    # The accessKeyID of minio.
+    #
+    # ENV KIMG_STORAGE_MINIO_ACCESSKEYID
+    accessKeyId: minioadmin
+
+    # The secretAccessKey of minio.
+    #
+    # ENV KIMG_STORAGE_MINIO_SECRETACCESSKEY
+    secretAccessKey: minioadmin
+
+    # The bucket of minio
+    #
+    # ENV KIMG_STORAGE_MINIO_BUCKET
+    bucket: kimgs
+
+    # Whether use ssl with minio
+    #
+    # ENV KIMG_STORAGE_MINIO_USESSL
+    useSSL: false
 
 #
 # Kimg WaterMark Configuration.
 #
 watermark:
-  
   # Whether or not to process watermark.
   #
   # ENV KIMG_WATERMARK_ENABLE
@@ -193,7 +206,6 @@ watermark:
 
   # Text WaterMark Configuration.
   text:
-
     # Text of watermark.
     #
     # ENV KIMG_WATERMARK_TEXT_CONTENT
@@ -226,7 +238,6 @@ watermark:
 
   # Logo WaterMark Configuration.
   logo:
-
     # Logo file of watermark.
     #
     # ENV KIMG_WATERMARK_LOGO_FILE
@@ -241,4 +252,3 @@ watermark:
     #
     # ENV KIMG_WATERMARK_LOGO_H
     h: 60
- 

@@ -3,10 +3,12 @@ package kimg
 import (
 	"bytes"
 	"crypto/md5"
+	"embed"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/fs"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -22,6 +24,9 @@ var contentTypes = map[string]string{
 	"gif":  "image/gif",
 	"webp": "image/webp",
 }
+
+//go:embed web/dist
+var www embed.FS
 
 func (ctx *KimgContext) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
@@ -69,21 +74,11 @@ func (ctx *KimgContext) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}))
 
 	if ctx.Config.Httpd.EnableWeb {
-		mux.HandleFunc("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			switch r.Method {
-			case "GET":
-				{
-					ctx.www(w, r)
-				}
-			}
-		}))
+		fsys, _ := fs.Sub(www, "web/dist")
+		mux.Handle("/", http.FileServer(http.FS(fsys)))
 	}
 
 	mux.ServeHTTP(w, r)
-}
-
-func (ctx *KimgContext) www(w http.ResponseWriter, r *http.Request) {
-	http.FileServer(http.Dir("./www")).ServeHTTP(w, r)
 }
 
 func (ctx *KimgContext) post(w http.ResponseWriter, r *http.Request) {

@@ -17,7 +17,7 @@ type kimgFileStorage struct {
 // NewKimgFileStorage create a file based storage instance.
 func NewKimgFileStorage(ctx *KimgContext) (KimgStorage, error) {
 	return &kimgFileStorage{
-		rootDir: ctx.Config.Storage.Root,
+		rootDir: ctx.Config.Storage.File.Root,
 		KimgBaseStorage: &KimgBaseStorage{
 			ctx: ctx,
 		},
