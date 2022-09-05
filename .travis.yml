@@ -45,6 +45,8 @@ before_deploy:
 - export CGO_CFLAGS_ALLOW="-fopenmp"
 - export CGO_CFLAGS="`pkg-config --cflags MagickWand MagickCore`"
 - export CGO_LDFLAGS="`pkg-config --libs MagickWand MagickCore` -ljpeg -lpng -lwebpmux -lwebp -lfontconfig -lfreetype -lgomp -lexpat -luuid -lz -lm -ldl"
+- go env -w GO111MODULE=on
+- go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
 - go get -d && go install -tags no_pkgconfig -v gopkg.in/gographics/imagick.v3/imagick
 - export TRAVIS_TAG="`git describe "--abbrev=0" "--tags"`"
 - go build -tags netgo -ldflags "-linkmode 'external' -extldflags '-static' -w -s -X 'main.KimgVersion=${TRAVIS_TAG}'" -o kimg main/kimg.go
