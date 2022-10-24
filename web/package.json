@@ -1,6 +1,6 @@
 {
   "name": "kimg",
-  "version": "0.7.1",
+  "version": "0.9.1",
   "scripts": {
     "start": "umi dev",
     "build": "umi build",

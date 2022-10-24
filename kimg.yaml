@@ -214,7 +214,7 @@ watermark:
     # Text Font Name of watermark.
     #
     # ENV KIMG_WATERMARK_TEXT_FONT_NAME
-    fontName:
+    fontName: arial.ttf
 
     # Text Font Size of watermark.
     #

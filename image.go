@@ -410,8 +410,8 @@ func (image *KimgImagick) waterMark(mw *imagick.MagickWand) error {
 			image.ctx.Logger.Debug("SetGravity %s", wm.Gravity)
 		}
 		if wm.Opacity > 0 {
-			// logoMW.SetImageAlpha(float64(wm.Opacity) / 100.0)
-			// image.ctx.Logger.Debug("SetImageAlpha %d", wm.Opacity)
+			logoMW.SetImageAlpha(float64(wm.Opacity) / 100.0)
+			image.ctx.Logger.Debug("SetImageAlpha %d", wm.Opacity)
 		}
 		if wm.Rotate > 0 {
 			dw.Rotate(float64(wm.Rotate))
